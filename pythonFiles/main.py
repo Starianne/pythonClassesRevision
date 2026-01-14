@@ -4,13 +4,17 @@ class Prize():
         self.type = type
         self.value = value
 
-
     def getName(self):
         return self.name
-        #return self.__name
     
-    def __str__(self):
-        return f"{self.name} has {self.value}"
+    def getType(self):
+        return self.type
+        
+    def getValue(self):
+        return self.value
+    
+    '''def __str__(self):
+        return f"{self.name} has {self.value}"'''
     
 A = Prize("Annelies","name",40)
 
