@@ -1,3 +1,5 @@
+import pygame
+from sys import exit
 from random import randint
 
 class Prize(): #Prize class with 3 variables and their getters
@@ -15,8 +17,6 @@ class Prize(): #Prize class with 3 variables and their getters
     def getValue(self):
         return self.value
     
-    '''def __str__(self):
-        return f"{self.name} has {self.value}"'''
     
 
 class Character():
@@ -47,6 +47,8 @@ class Character():
     def changePosition(self, move):
         self.roadPosition += move
 
+    
+
 def road_set(null_road): # sets 10 prizes randomly on the road set and gives the complete road back
     flag = True
     count = 10
@@ -62,8 +64,18 @@ def road_set(null_road): # sets 10 prizes randomly on the road set and gives the
             flag = False
     return null_road
 
+def display_road(road):
+    for i in range(0,49):
+        print(f"Space {i+1}")
+        if road[i] == 0:
+            print("empty")
+        else:
+            print(road[i].getValue())
+
+
 road = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 game_road = road_set(road)
+display_road(game_road)
 
 character1 = Character('Jamal')
 new_position = 0
@@ -83,5 +95,17 @@ print("You have finished")
 allPrizes = [] #to store prizes to win
 
 
+pygame.init()
+screen = pygame.display.set_mode((1720,1010))
+pygame.display.set_caption('Runner')
+clock = pygame.time.Clock()
+
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+    pygame.display.update()
+    clock.tick(60)
 
 
