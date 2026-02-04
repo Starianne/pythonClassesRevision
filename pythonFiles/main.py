@@ -89,7 +89,7 @@ while new_position < 50:
         character1.updateValues(prize_type,value_amount)
         print(f"Congrats you are in position {new_position} and found {game_road[new_position].getName()}")
         print(f"Money = {character1.getMoney()} and experience = {character1.getExperience()}")
-print("You have finished")
+print(f"{character1.getName()} You have finished")
 
 
 allPrizes = [] #to store prizes to win
