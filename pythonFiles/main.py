@@ -1,6 +1,13 @@
 import pygame
+import os
 from sys import exit
 from random import randint
+
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        #add player image.covert_alpha()
+        #add player rect
 
 class Prize(): #Prize class with 3 variables and their getters
     def __init__(self, name, type, value):
@@ -19,7 +26,7 @@ class Prize(): #Prize class with 3 variables and their getters
     
     
 
-class Character():
+'''class Character():
     def __init__(self, name):
         self.name = name
         self.money = 5
@@ -47,7 +54,7 @@ class Character():
     def changePosition(self, move):
         self.roadPosition += move
 
-    
+    '''
 
 def road_set(null_road): # sets 10 prizes randomly on the road set and gives the complete road back
     flag = True
@@ -96,11 +103,15 @@ allPrizes = [] #to store prizes to win
 
 
 pygame.init()
-screen = pygame.display.set_mode((1720,1010))
+os.environ['SDL_VIDEO_CENTERED'] = '1' #called after pygame.init()
+info = pygame.display.Info() #called before set_mode()
+screen_width, screen_height = info.current_w, info.current_h
+screen = pygame.display.set_mode((screen_width, screen_height-50), pygame.RESIZABLE) #coords so must have another set of brackets around them to define them, then lets user change screen size after
 pygame.display.set_caption('Runner')
 clock = pygame.time.Clock()
 
 while True:
+    pygame.draw.rect(screen, 'red', [200,200,100,100])
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
