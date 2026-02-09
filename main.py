@@ -92,7 +92,10 @@ info = pygame.display.Info() #called before set_mode()
 screen_width, screen_height = info.current_w, info.current_h #grabs screen width and height
 screen = pygame.display.set_mode((screen_width, screen_height-50), pygame.RESIZABLE) #coords so must have another set of brackets around them to define them, then lets user change screen size after
 pygame.display.set_caption('Runner')
+global game_active
 game_active = False
+
+global game_complete
 game_complete = False
 clock = pygame.time.Clock()
 running = True
@@ -105,12 +108,17 @@ text_font = pygame.font.Font('font/TenorSans-Regular.ttf', 50)
 #intro:
 title_surface = text_font.render("Game 2", False, "white").convert()
 title_rect = title_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
+#tutorial:
+tutorial = False
+tutorial_surface = pygame.Surface((int(screen_width/2), int(screen_height/2)))
+tutorial_surface.fill("white")
+
 
 objects = []
 
 #trying to make a button class
 class Button():
-    def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=None, onePress=False):
+    def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=False, onePress=False):
         self.x = x
         self.y = y
         self.width = width
@@ -153,10 +161,21 @@ class Button():
 def myFunction():
     print('Button Pressed')
 
+def startGameFunc():
+    global game_active 
+    game_active = True
+    print('started game')
+    return game_active
+
+def tutorialFunc():
+    global tutorial
+    tutorial = True
+    return tutorial
 #Button(30, 30, 400, 100, 'Button One (onePress)', myFunction)
 #Button (30, 140, 400, 100, 'Button Two(multiPress)', myFunction, True) hold down the button for multiple inputs
 
-Button(30, 30, 400, 100, 'Start Game', myFunction)
+Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, 'Start Game', startGameFunc)
+Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400, 100, 'Read Tutorial', tutorialFunc)
 
 
 
@@ -168,11 +187,23 @@ while running == True:
             running = False
     
     
+    screen.fill("#AFEBFA")
 
-    if game_complete == False:
-            screen.fill("#AFEBFA")
-            screen.blit(title_surface,title_rect)
-            objects[0].process() #start Game button
+    if game_complete == False and game_active == False:
+        screen.blit(title_surface,title_rect)
+        objects[0].process() #start Game button
+        objects[1].process() #tutorial button
+    
+    if tutorial:
+        screen.blit(tutorial_surface, (100, 100))
+
+    if game_active:
+        screen.fill("#AFEBFA") 
+        #Actual game goes in here
+           
+    
+
+
 
 
 
