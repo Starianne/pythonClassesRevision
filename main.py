@@ -1,4 +1,5 @@
 import pygame
+import spritesheet
 import os
 from sys import exit
 from random import randint
@@ -80,40 +81,48 @@ display_road(game_road)
 
 
 
-allPrizes = [] #to store prizes to win
-
-
-
-
 
 pygame.init()
+
 os.environ['SDL_VIDEO_CENTERED'] = '1' #called after pygame.init()
 info = pygame.display.Info() #called before set_mode()
 screen_width, screen_height = info.current_w, info.current_h #grabs screen width and height
 screen = pygame.display.set_mode((screen_width, screen_height-50), pygame.RESIZABLE) #coords so must have another set of brackets around them to define them, then lets user change screen size after
-pygame.display.set_caption('Runner')
+pygame.display.set_caption('Game 2')
+
+#game state vars
 global game_active
 game_active = False
 
 global game_complete
 game_complete = False
+
 clock = pygame.time.Clock()
 running = True
 dt = 0
 
 
 #must be under pygame.init()
+
 #font:
 text_font = pygame.font.Font('font/TenorSans-Regular.ttf', 50)
+
 #intro:
-title_surface = text_font.render("Game 2", False, "white").convert()
+title_surface = text_font.render("Game 2", False, "white").convert_alpha()
 title_rect = title_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
+
 #tutorial:
 tutorial = False
 tutorial_surface = pygame.Surface((int(screen_width/2), int(screen_height/2)))
 tutorial_surface.fill("white")
 
+#spritesheet:
+goob_spritesheet_image = pygame.image.load('graphics/player/goob_spritesheet.png').convert_alpha() #getting sprite sheet
+goob_spritesheet = spritesheet.SpriteSheet(goob_spritesheet_image) #calling class
+frame_0 = goob_spritesheet.get_image(0, 24, 24, 8) 
+frame_1 = goob_spritesheet.get_image(1, 24, 24, 8)
 
+#buttons:
 objects = []
 
 #trying to make a button class
@@ -180,7 +189,7 @@ Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400
 
 
 
-while running == True:
+while running:
     #player inputs will be here
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -200,7 +209,8 @@ while running == True:
     if game_active:
         screen.fill("#AFEBFA") 
         #Actual game goes in here
-           
+        screen.blit(frame_0, (0,0)) 
+        screen.blit(frame_1, (200,0))           
     
 
 
