@@ -167,8 +167,7 @@ tutorial_surface.fill("white")
 #year:
 global current_year
 current_year = 0
-year_surface = text_font.render("GOOB - Year "+ str(current_year), False, "black").convert_alpha()
-year_rect = year_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
+
 
 #groups:
 goob = pygame.sprite.GroupSingle()
@@ -242,7 +241,7 @@ def incrementYearFunc():
 
 Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, 'Start Game', startGameFunc)
 Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400, 100, 'Read Tutorial', tutorialFunc)
-Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400, 100, 'Keep Going!', incrementYearFunc)
+Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400, 100, 'Keep Going!', incrementYearFunc) #press this and current year goes up
 
 
 
@@ -265,8 +264,11 @@ while running:
 
     if game_active:
         screen.fill("#AFEBFA") 
+        year_surface = text_font.render("GOOB - Year "+ str(current_year), False, "black").convert_alpha()
+        year_rect = year_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
         screen.blit(year_surface,year_rect)
         #Actual game goes in here
+        
         objects[2].process() #next year button
         goob.draw(screen)
         goob.update()
