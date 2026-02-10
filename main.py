@@ -4,12 +4,60 @@ import os
 from sys import exit
 from random import randint
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self):
+class Goob(pygame.sprite.Sprite):
+    def __init__(self, scale):
         super().__init__()
-        #add player image.covert_alpha()
-        player_idle_1 = pygame.image.load('graphics/player')
-        #add player rect
+    
+        #spritesheet:
+        spritesheet_image = pygame.image.load('graphics/player/goob_spritesheet.png').convert_alpha() #getting sprite sheet
+        goob_spritesheet = spritesheet.SpriteSheet(spritesheet_image) #calling class
+        self.scale = scale
+        self.goob_index = 0
+        self.x_pos = 100
+
+        #goob frames
+        goob_stand = goob_spritesheet.get_image(0, 24, 24, scale) 
+        goob_step = goob_spritesheet.get_image(1, 24, 24, scale)
+        goob_crouch = goob_spritesheet.get_image(2, 24, 24, scale)
+        goob_jump = goob_spritesheet.get_image(3, 24, 24, scale)
+        goob_win = goob_spritesheet.get_image(4, 24, 24, scale)
+        goob_look_bl = goob_spritesheet.get_image(5, 24, 24, scale)
+        goob_look_br = goob_spritesheet.get_image(6, 24, 24, scale)
+        goob_look_ul = goob_spritesheet.get_image(7, 24, 24, scale)
+        goob_look_ur = goob_spritesheet.get_image(8, 24, 24, scale)
+        goob_surprise = goob_spritesheet.get_image(9, 24, 24, scale)
+        goob_sweetie = goob_spritesheet.get_image(10, 24, 24, scale)
+        goob_money = goob_spritesheet.get_image(11, 24, 24, scale)
+        goob_envelope = goob_spritesheet.get_image(12, 24, 24, scale)
+        goob_key = goob_spritesheet.get_image(13, 24, 24, scale)
+        goob_dead = goob_spritesheet.get_image(14, 24, 24, scale)
+
+        self.goob_walk = [goob_stand, goob_step]
+        self.goob_jumping = [goob_crouch, goob_jump]
+        
+        #set current image and rect
+        self.image = self.goob_walk[0]
+        self.rect = self.image.get_rect(topleft=(self.x_pos, 100))
+
+    def animation_state(self, state):
+        if state == "walk":
+            self.goob_index += 0.2
+            if self.goob_index >= len(self.goob_walk):
+                self.goob_index = 0
+            self.image = self.goob_walk[int(self.goob_index)]
+
+    def player_input(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a]:
+            self.animation_state("walk")
+            self.x_pos -= 6
+        elif keys[pygame.K_d]:
+            self.animation_state("walk")
+            self.x_pos += 6
+        self.rect.x = self.x_pos
+    
+    def update(self):
+        self.player_input()
 
 def generate():
         container = ["an envelope", "a box", "a suitcase", "a chest"]
@@ -116,11 +164,15 @@ tutorial = False
 tutorial_surface = pygame.Surface((int(screen_width/2), int(screen_height/2)))
 tutorial_surface.fill("white")
 
-#spritesheet:
-goob_spritesheet_image = pygame.image.load('graphics/player/goob_spritesheet.png').convert_alpha() #getting sprite sheet
-goob_spritesheet = spritesheet.SpriteSheet(goob_spritesheet_image) #calling class
-frame_0 = goob_spritesheet.get_image(0, 24, 24, 8) 
-frame_1 = goob_spritesheet.get_image(1, 24, 24, 8)
+#year:
+global current_year
+current_year = 0
+year_surface = text_font.render("GOOB - Year "+ str(current_year), False, "black").convert_alpha()
+year_rect = year_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
+
+#groups:
+goob = pygame.sprite.GroupSingle()
+goob.add(Goob(4))
 
 #buttons:
 objects = []
@@ -180,12 +232,17 @@ def tutorialFunc():
     global tutorial
     tutorial = True
     return tutorial
+
+def incrementYearFunc():
+    global current_year
+    current_year += 1
+    return current_year
 #Button(30, 30, 400, 100, 'Button One (onePress)', myFunction)
 #Button (30, 140, 400, 100, 'Button Two(multiPress)', myFunction, True) hold down the button for multiple inputs
 
 Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, 'Start Game', startGameFunc)
 Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400, 100, 'Read Tutorial', tutorialFunc)
-
+Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400, 100, 'Keep Going!', incrementYearFunc)
 
 
 
@@ -208,9 +265,12 @@ while running:
 
     if game_active:
         screen.fill("#AFEBFA") 
+        screen.blit(year_surface,year_rect)
         #Actual game goes in here
-        screen.blit(frame_0, (0,0)) 
-        screen.blit(frame_1, (200,0))           
+        objects[2].process() #next year button
+        goob.draw(screen)
+        goob.update()
+                  
     
 
 
