@@ -15,12 +15,14 @@ class Goob(pygame.sprite.Sprite):
         self.goob_index = 0
 
         # availability and invent
-        self.available = 1
+        self.horizontal_available = 1
+        self.vertical_available = 1
         self.money = 0
         self.keys = 0
         self.sweets = 0
 
         self.x_pos = 100
+        self.y_pos = 100
 
         # goob frames
         goob_stand = goob_spritesheet.get_image(0, 24, 24, scale)
@@ -44,11 +46,14 @@ class Goob(pygame.sprite.Sprite):
 
         # set current image and rect
         self.image = self.goob_walk[0]
-        self.rect = self.image.get_rect(topleft=(self.x_pos, 100))
+        self.rect = self.image.get_rect(topleft=(self.x_pos, self.y_pos))
 
     # availability / inventory methods
-    def get_available(self):
-        return self.available
+    def get_horizontal_available(self):
+        return self.horizontal_available
+    
+    def get_vertical_available(self):
+        return self.vertical_available
 
     def add_money(self, money):
         self.money = money
@@ -77,8 +82,8 @@ class Goob(pygame.sprite.Sprite):
 
     def player_input(self):
         # only allow movement when available == 1
-        if self.available == 1:
-            keys = pygame.key.get_pressed()
+        keys = pygame.key.get_pressed()
+        if self.horizontal_available == 1:
             if keys[pygame.K_a]:
                 self.animation_state("walk")
                 self.x_pos -= 6
@@ -86,6 +91,15 @@ class Goob(pygame.sprite.Sprite):
                 self.animation_state("walk")
                 self.x_pos += 6
             self.rect.x = self.x_pos
+        if self.vertical_available == 1:
+            if keys[pygame.K_w]:
+                self.animation_state("walk")
+                self.y_pos -= 6
+            elif keys[pygame.K_s]:
+                self.animation_state("walk")
+                self.y_pos += 6
+            self.rect.y = self.y_pos
+            
 
     def update(self):
         self.player_input()
@@ -128,7 +142,7 @@ class Prize(): #Prize class with 3 variables and their getters
         return message
 
 
-
+#might change what i do with this later
 def day_events():
     days = []
     for i in range(0,99):
@@ -239,17 +253,123 @@ def tutorialFunc():
     tutorial = True
     return tutorial
 
+#events--------------------------------------------------------------------
+
+global events
+events = ["birch", "thief", "pebble_art", "core_apple", "birds_eye", "holly_molly", "cratin", "sea_saw", "meowntain", "velcrows", "dont_mention_it"]
+
+def decide_event():
+    events_length = len(events) - 1
+    selected = randint(0, events_length)
+    match selected:
+        case 0 :
+            return birch_event()
+        case 1 :
+            return thief_event()
+        case 2 :
+            return pebble_art_event()
+        case 3 :
+            return core_apple_event()
+        case 4 :
+            return birds_eye_event()
+        case 5 :
+            return holly_molly_event()
+        case 6 :
+            return cratin_event()
+        case 7 :
+            return sea_saw_event()
+        case 8 :
+            return meowntain_event()
+        case 9 :
+            return velcrows_event()
+        case 10 :
+            return dont_mention_it_event()
+
+#birch event
+
+
+def birch_event():
+    birch_surface = pygame.Surface((int(screen_width/16), int(screen_height/8)))
+    birch_surface.fill("green")
+    screen.blit(birch_surface, (screen_width/6,screen_height/2))
+
+
+
+#thief event
+def thief_event():
+    pass
+
+
+# pebble art event
+def pebble_art_event():
+    pass
+
+
+#core apple event
+def core_apple_event():
+    pass
+
+
+#birds eye event
+def birds_eye_event():
+    pass
+
+
+#holly molly event
+def holly_molly_event():
+    pass
+
+
+#cratin event
+def cratin_event():
+    pass
+
+
+#sea saw event
+def sea_saw_event():
+    pass
+
+#meowntain event
+def meowntain_event():
+    pass
+
+
+#velcrows event
+def velcrows_event():
+    pass
+
+#dont mention it event
+def dont_mention_it_event():
+    pass
+
+
+#-----------------------------------------------------------------------------------
+
 def incrementDayFunc():
     global current_day
     current_day += 1
+    toggle_all_movement()
+    decide_event()
     return current_day
 
-def turn_off_movement():
+#movement toggles
+def toggle_horizontal_movement():
     s = goob.sprite
-    if s is None:       #got annoyed and put this into chat, will test and comment on this tomorrow
+    if s is None:       
         return
-    s.available = 0 if s.available == 1 else 1
-    return s.available
+    s.horizontal_available = 0 if s.horizontal_available == 1 else 1 #ternary/conditional expression did not know this was a thing in python too
+    return s.horizontal_available
+
+def toggle_vertical_movement():
+    z = goob.sprite
+    if z is None:       
+        return
+    z.vertical_available = 0 if z.vertical_available == 1 else 1 #ternary/conditional expression did not know this was a thing in python too
+    return z.vertical_available
+
+def toggle_all_movement():
+    toggle_horizontal_movement()
+    toggle_vertical_movement()
     
 #Button(30, 30, 400, 100, 'Button One (onePress)', myFunction)
 #Button (30, 140, 400, 100, 'Button Two(multiPress)', myFunction, True) hold down the button for multiple inputs
@@ -257,7 +377,7 @@ def turn_off_movement():
 Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400, 100, 'Start Game', startGameFunc)
 Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, 'Read Tutorial', tutorialFunc)
 Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400, 100, 'Keep Going!', incrementDayFunc) #press this and current day goes up
-Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, 'Turn on/off movement', turn_off_movement)
+Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, 'Turn on/off movement', toggle_horizontal_movement) #temp for testing
 
 
 while running:
@@ -283,9 +403,9 @@ while running:
         year_rect = year_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
         screen.blit(year_surface,year_rect)
         #Actual game goes in here
-        
-        objects[2].process() #next year button
-        objects[3].process() #turn off movement button to test disabling player input
+
+        objects[2].process() #next year button needs to call branch of events 
+        birch_event()
         goob.draw(screen)
         goob.update()
 
