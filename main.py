@@ -1,6 +1,7 @@
 import pygame
 import spritesheet
 import os
+import math
 from sys import exit
 from random import randint
 
@@ -141,6 +142,20 @@ class Prize(): #Prize class with 3 variables and their getters
                 message = "You got " + self.name + " with 1 " + self.type + " in!"
         return message
 
+#text box class:------------------------------------------------------------------------------------------
+class Textbox():
+    def __init__(self, text):
+        self.text = text
+        self.line_height = screen_height/15
+        self.line_width = screen_width/3
+        self.num_lines= math.ceil(len(text) / self.line_width)
+        self.area_height = self.num_lines * self.line_height
+        self.area = self.area_height * self.line_width
+
+    def draw():
+        message_back_surface = 
+        #add surface and rect and blit the do same with text
+
 
 #might change what i do with this later
 def day_events():
@@ -174,6 +189,7 @@ dt = 0
 #must be under pygame.init()
 
 #font:
+global text_font
 text_font = pygame.font.Font('font/TenorSans-Regular.ttf', 50)
 
 #intro:
@@ -287,11 +303,13 @@ def decide_event():
 
 #birch event
 
-
 def birch_event():
+    screen.fill("#AFEBFA")
     birch_surface = pygame.Surface((int(screen_width/16), int(screen_height/8)))
     birch_surface.fill("green")
     screen.blit(birch_surface, (screen_width/6,screen_height/2))
+
+
 
 
 
@@ -406,6 +424,7 @@ while running:
 
         objects[2].process() #next year button needs to call branch of events 
         birch_event()
+        speech_bubble("What do you think about my hat Goob?")
         goob.draw(screen)
         goob.update()
 
