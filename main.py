@@ -1,6 +1,7 @@
 import pygame
 import spritesheet #wait
 from goobs import *
+from text_box import Textbox
 import os
 from sys import exit
 from random import randint
@@ -42,59 +43,14 @@ class Prize(): #Prize class with 3 variables and their getters
                 message = "You got " + self.name + " with 1 " + self.type + " in!"
         return message
 
-#text box class:------------------------------------------------------------------------------------------
-class Textbox():
-    def __init__(self, text):
-        self.text = text
-        self.font = text_font
-        self.x, self.y = screen_width/3, screen_height/3
 
-        self.line_width = screen_width//3
-        self.padding = 10
-
-        self.lines = self.wrap_text()
-        self.line_height = self.font.get_height()
-        self.area_height = len(self.lines) * self.line_height + self.padding * 2
-
-        self.message_back_surface = pygame.Surface((self.line_width, self.area_height))
-        self.message_back_surface.fill("white") #to set up textbox
-    
-    def wrap_text(self):
-        words = self.text.split(" ") #splits text into array with words
-        lines = []
-        current_line = ""
-
-        for word in words:
-            test_line = current_line + (" " if current_line != "" else "") + word #ternary operators might be the goat
-            if self.font.size(test_line)[0] <= self.line_width - self.padding * 2:
-                current_line = test_line
-            else: 
-                lines.append(current_line)
-                current_line = word
-
-        if current_line:
-            lines.append(current_line)
-
-        return(lines)
-
-    def draw(self, screen):
-        self.message_back_surface.fill("white") #to cover old text box
-
-        y=self.padding
-        for line in self.lines:
-            text_surf = self.font.render(line, True, "black")
-            self.message_back_surface.blit(text_surf, (self.padding, y))
-            y += self.line_height
-        
-        screen.blit(self.message_back_surface, (self.x, self.y))
 
 def next_box(event_texts):
     keys = pygame.key.get_pressed()
-    for event_text in event_texts:
-            if keys[pygame.K_RETURN]:
-                current_textbox = Textbox(event_text)
-                current_textbox.draw(screen) #return is the enter button
-        
+    if keys[pygame.K_RETURN]:#return is the enter button
+        for event_text in event_texts:
+            current_textbox = Textbox(event_text, text_font, screen_width, screen_height)
+            current_textbox.draw(screen)
             
         
 
