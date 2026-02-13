@@ -146,18 +146,53 @@ class Prize(): #Prize class with 3 variables and their getters
 class Textbox():
     def __init__(self, text):
         self.text = text
-        self.line_height = screen_height/15
-        self.line_width = screen_width/3
-        self.num_lines= math.ceil(len(text) / self.line_width)
-        self.area_height = self.num_lines * self.line_height
-        self.area = self.area_height * self.line_width
+        self.font = text_font
+        self.x, self.y = screen_width/3, (5*screen_height)/6
 
-    def draw():
-        message_back_surface = 
-        #add surface and rect and blit the do same with text
+        self.line_width = screen_width//3
+        self.padding = 10
+
+        self.lines = self.wrap_text()
+        self.line_height = self.font.get_height()
+        self.area_height = len(self.lines) * self.line_height + self.padding * 2
+
+        self.message_back_surface = pygame.Surface((self.line_width, self.area_height))
+        self.message_back_surface.fill("white") #to set up textbox
+    
+    def wrap_text(self):
+        words = self.text.split(" ") #splits text into array with words
+        lines = []
+        current_line = ""
+
+        for word in words:
+            test_line = current_line + (" " if current_line != "" else "") + word #ternary operators might be the goat
+            if self.font.size(test_line)[0] <= self.line_width - self.padding * 2:
+                current_line = test_line
+            else: 
+                lines.append(current_line)
+                current_line = word
+
+        if current_line:
+            lines.append(current_line)
+
+        return(lines)
+    
+    
+
+    def draw(self, screen):
+        self.message_back_surface.fill("white") #to cover old text box
+
+        y=self.padding
+        for line in self.lines:
+            text_surf = self.font.render(line, True, "black")
+            self.message_back_surface.blit(text_surf, (self.padding, y))
+            y += self.line_height
+        
+        screen.blit(self.message_back_surface, (self.x, self.y))
 
 
-#might change what i do with this later
+
+#probably will change what i do with this later
 def day_events():
     days = []
     for i in range(0,99):
@@ -171,7 +206,8 @@ pygame.init()
 os.environ['SDL_VIDEO_CENTERED'] = '1' #called after pygame.init()
 info = pygame.display.Info() #called before set_mode()
 screen_width, screen_height = info.current_w, info.current_h #grabs screen width and height
-screen = pygame.display.set_mode((screen_width, screen_height-50), pygame.RESIZABLE) #coords so must have another set of brackets around them to define them, then lets user change screen size after
+global screen
+screen = pygame.display.set_mode((screen_width, screen_height)) #coords so must have another set of brackets around them to define them
 pygame.display.set_caption('Game 2')
 
 #game state vars
@@ -303,11 +339,17 @@ def decide_event():
 
 #birch event
 
-def birch_event():
+def birch_event(text=None):
+    if text is None:
+        text = "" #for now
     screen.fill("#AFEBFA")
     birch_surface = pygame.Surface((int(screen_width/16), int(screen_height/8)))
     birch_surface.fill("green")
     screen.blit(birch_surface, (screen_width/6,screen_height/2))
+    textbox = Textbox(text)
+    textbox.draw(screen)
+
+
 
 
 
@@ -417,14 +459,14 @@ while running:
 
     if game_active:
         screen.fill("#AFEBFA") 
+       #next year button needs to call branch of events 
+        birch_event("hey there buddy")
         year_surface = text_font.render("GOOB - Day "+ str(current_day), False, "black").convert_alpha()
         year_rect = year_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
         screen.blit(year_surface,year_rect)
         #Actual game goes in here
 
-        objects[2].process() #next year button needs to call branch of events 
-        birch_event()
-        speech_bubble("What do you think about my hat Goob?")
+        objects[2].process() 
         goob.draw(screen)
         goob.update()
 
