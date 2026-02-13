@@ -1,109 +1,9 @@
 import pygame
-import spritesheet
+import spritesheet #wait
+from goobs import *
 import os
-import math
 from sys import exit
 from random import randint
-
-class Goob(pygame.sprite.Sprite):
-    def __init__(self, scale):
-        super().__init__()
-
-        # spritesheet:
-        spritesheet_image = pygame.image.load('graphics/player/goob_spritesheet.png').convert_alpha()
-        goob_spritesheet = spritesheet.SpriteSheet(spritesheet_image)
-        self.scale = scale
-        self.goob_index = 0
-
-        # availability and invent
-        self.horizontal_available = 1
-        self.vertical_available = 1
-        self.money = 0
-        self.keys = 0
-        self.sweets = 0
-
-        self.x_pos = 100
-        self.y_pos = 100
-
-        # goob frames
-        goob_stand = goob_spritesheet.get_image(0, 24, 24, scale)
-        goob_step = goob_spritesheet.get_image(1, 24, 24, scale)
-        goob_crouch = goob_spritesheet.get_image(2, 24, 24, scale)
-        goob_jump = goob_spritesheet.get_image(3, 24, 24, scale)
-        goob_win = goob_spritesheet.get_image(4, 24, 24, scale)
-        goob_look_bl = goob_spritesheet.get_image(5, 24, 24, scale)
-        goob_look_br = goob_spritesheet.get_image(6, 24, 24, scale)
-        goob_look_ul = goob_spritesheet.get_image(7, 24, 24, scale)
-        goob_look_ur = goob_spritesheet.get_image(8, 24, 24, scale)
-        goob_surprise = goob_spritesheet.get_image(9, 24, 24, scale)
-        goob_sweetie = goob_spritesheet.get_image(10, 24, 24, scale)
-        goob_money = goob_spritesheet.get_image(11, 24, 24, scale)
-        goob_envelope = goob_spritesheet.get_image(12, 24, 24, scale)
-        goob_key = goob_spritesheet.get_image(13, 24, 24, scale)
-        goob_dead = goob_spritesheet.get_image(14, 24, 24, scale)
-
-        self.goob_walk = [goob_stand, goob_step]
-        self.goob_jumping = [goob_crouch, goob_jump]
-
-        # set current image and rect
-        self.image = self.goob_walk[0]
-        self.rect = self.image.get_rect(topleft=(self.x_pos, self.y_pos))
-
-    # availability / inventory methods
-    def get_horizontal_available(self):
-        return self.horizontal_available
-    
-    def get_vertical_available(self):
-        return self.vertical_available
-
-    def add_money(self, money):
-        self.money = money
-
-    def add_keys(self, keys):
-        self.keys = keys
-
-    def add_sweets(self, sweets):
-        self.sweets = sweets
-
-    def get_money(self):
-        return self.money
-
-    def get_keys(self):
-        return self.keys
-
-    def get_sweets(self):
-        return self.sweets
-
-    def animation_state(self, state):
-        if state == "walk":
-            self.goob_index += 0.2
-            if self.goob_index >= len(self.goob_walk):
-                self.goob_index = 0
-            self.image = self.goob_walk[int(self.goob_index)]
-
-    def player_input(self):
-        # only allow movement when available == 1
-        keys = pygame.key.get_pressed()
-        if self.horizontal_available == 1:
-            if keys[pygame.K_a]:
-                self.animation_state("walk")
-                self.x_pos -= 6
-            elif keys[pygame.K_d]:
-                self.animation_state("walk")
-                self.x_pos += 6
-            self.rect.x = self.x_pos
-        if self.vertical_available == 1:
-            if keys[pygame.K_w]:
-                self.animation_state("walk")
-                self.y_pos -= 6
-            elif keys[pygame.K_s]:
-                self.animation_state("walk")
-                self.y_pos += 6
-            self.rect.y = self.y_pos
-            
-
-    def update(self):
-        self.player_input()
 
 def generate():
     container = ["an envelope", "a box", "a suitcase", "a chest"]
@@ -147,7 +47,7 @@ class Textbox():
     def __init__(self, text):
         self.text = text
         self.font = text_font
-        self.x, self.y = screen_width/3, (5*screen_height)/6
+        self.x, self.y = screen_width/3, screen_height/3
 
         self.line_width = screen_width//3
         self.padding = 10
@@ -176,8 +76,6 @@ class Textbox():
             lines.append(current_line)
 
         return(lines)
-    
-    
 
     def draw(self, screen):
         self.message_back_surface.fill("white") #to cover old text box
@@ -190,7 +88,15 @@ class Textbox():
         
         screen.blit(self.message_back_surface, (self.x, self.y))
 
-
+def next_box(event_texts):
+    keys = pygame.key.get_pressed()
+    for event_text in event_texts:
+            if keys[pygame.K_RETURN]:
+                current_textbox = Textbox(event_text)
+                current_textbox.draw(screen) #return is the enter button
+        
+            
+        
 
 #probably will change what i do with this later
 def day_events():
@@ -242,14 +148,16 @@ global current_day
 current_day = 0
 
 
-#groups:
+#groups: 
+#player sprite group
 goob = pygame.sprite.GroupSingle()
 goob.add(Goob(4))
+
 
 #buttons:
 objects = []
 
-#trying to make a button class
+#since I only have a few buttons rn im not sure whether i move this yet
 class Button():
     def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=False, onePress=False):
         self.x = x
@@ -305,6 +213,26 @@ def tutorialFunc():
     tutorial = True
     return tutorial
 
+#movement toggles
+def toggle_horizontal_movement():
+    s = goob.sprite
+    if s is None:       
+        return
+    s.horizontal_available = 0 if s.horizontal_available == 1 else 1 #ternary/conditional expression did not know this was a thing in python too
+    return s.horizontal_available
+
+def toggle_vertical_movement():
+    z = goob.sprite
+    if z is None:       
+        return
+    z.vertical_available = 0 if z.vertical_available == 1 else 1 #ternary/conditional expression did not know this was a thing in python too
+    return z.vertical_available
+
+def toggle_all_movement():
+    toggle_horizontal_movement()
+    toggle_vertical_movement()
+
+
 #events--------------------------------------------------------------------
 
 global events
@@ -339,15 +267,12 @@ def decide_event():
 
 #birch event
 
-def birch_event(text=None):
-    if text is None:
-        text = "" #for now
+def birch_event():
     screen.fill("#AFEBFA")
     birch_surface = pygame.Surface((int(screen_width/16), int(screen_height/8)))
     birch_surface.fill("green")
     screen.blit(birch_surface, (screen_width/6,screen_height/2))
-    textbox = Textbox(text)
-    textbox.draw(screen)
+    
 
 
 
@@ -412,24 +337,7 @@ def incrementDayFunc():
     decide_event()
     return current_day
 
-#movement toggles
-def toggle_horizontal_movement():
-    s = goob.sprite
-    if s is None:       
-        return
-    s.horizontal_available = 0 if s.horizontal_available == 1 else 1 #ternary/conditional expression did not know this was a thing in python too
-    return s.horizontal_available
-
-def toggle_vertical_movement():
-    z = goob.sprite
-    if z is None:       
-        return
-    z.vertical_available = 0 if z.vertical_available == 1 else 1 #ternary/conditional expression did not know this was a thing in python too
-    return z.vertical_available
-
-def toggle_all_movement():
-    toggle_horizontal_movement()
-    toggle_vertical_movement()
+birch_text = ["Goob do you like my hat?", "I can't take it off", "My branch dresser sneezed"]
     
 #Button(30, 30, 400, 100, 'Button One (onePress)', myFunction)
 #Button (30, 140, 400, 100, 'Button Two(multiPress)', myFunction, True) hold down the button for multiple inputs
@@ -437,7 +345,7 @@ def toggle_all_movement():
 Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400, 100, 'Start Game', startGameFunc)
 Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, 'Read Tutorial', tutorialFunc)
 Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400, 100, 'Keep Going!', incrementDayFunc) #press this and current day goes up
-Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, 'Turn on/off movement', toggle_horizontal_movement) #temp for testing
+ #temp for testing
 
 
 while running:
@@ -460,11 +368,12 @@ while running:
     if game_active:
         screen.fill("#AFEBFA") 
        #next year button needs to call branch of events 
-        birch_event("hey there buddy")
+      
         year_surface = text_font.render("GOOB - Day "+ str(current_day), False, "black").convert_alpha()
         year_rect = year_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
         screen.blit(year_surface,year_rect)
         #Actual game goes in here
+        next_box(birch_text)
 
         objects[2].process() 
         goob.draw(screen)
