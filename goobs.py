@@ -2,12 +2,12 @@ import pygame
 import spritesheet
 
 
-
 #Goob's class
 class Goob(pygame.sprite.Sprite):
-    def __init__(self, scale):
+    def __init__(self, scale, game_state):
         super().__init__()
 
+        self.game_state = game_state
         # spritesheet:
         spritesheet_image = pygame.image.load('graphics/player/goob_spritesheet.png').convert_alpha()
         goob_spritesheet = spritesheet.SpriteSheet(spritesheet_image)
@@ -17,9 +17,6 @@ class Goob(pygame.sprite.Sprite):
         # availability and invent
         self.horizontal_available = 1
         self.vertical_available = 1
-        self.money = 0
-        self.keys = 0
-        self.sweets = 0
 
         self.x_pos = 100
         self.y_pos = 100
@@ -55,23 +52,6 @@ class Goob(pygame.sprite.Sprite):
     def get_vertical_available(self):
         return self.vertical_available
 
-    def add_money(self, money):
-        self.money = money
-
-    def add_keys(self, keys):
-        self.keys = keys
-
-    def add_sweets(self, sweets):
-        self.sweets = sweets
-
-    def get_money(self):
-        return self.money
-
-    def get_keys(self):
-        return self.keys
-
-    def get_sweets(self):
-        return self.sweets
 
     def animation_state(self, state):
         if state == "walk":
