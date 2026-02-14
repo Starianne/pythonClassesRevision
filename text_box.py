@@ -15,7 +15,7 @@ class Textbox():
         self.area_height = len(self.lines) * self.line_height + self.padding * 2
 
         self.message_back_surface = pygame.Surface((self.line_width, self.area_height))
-        self.message_back_surface.fill("white") #to set up textbox
+         #to set up textbox
     
     def wrap_text(self):
         words = self.text.split(" ") #splits text into array with words
@@ -45,3 +45,4 @@ class Textbox():
             y += self.line_height
         
         screen.blit(self.message_back_surface, (self.x, self.y))
+

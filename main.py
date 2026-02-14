@@ -5,6 +5,7 @@ from text_box import Textbox
 import os
 from sys import exit
 from random import randint
+from holly_molly import holly_molly_event
 
 def generate():
     container = ["an envelope", "a box", "a suitcase", "a chest"]
@@ -216,8 +217,8 @@ def decide_event():
             return core_apple_event()
         case 4 :
             return birds_eye_event()
-        case 5 :
-            return holly_molly_event()
+       # case 5 :
+        #    return holly_molly_event()
         case 6 :
             return cratin_event()
         case 7 :
@@ -265,8 +266,8 @@ def birds_eye_event():
 
 
 #holly molly event
-def holly_molly_event():
-    pass
+#def holly_molly_event():
+   #pass
 
 
 #cratin event
@@ -341,8 +342,8 @@ while running:
         year_rect = year_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
         screen.blit(year_surface,year_rect)
         #Actual game goes in here
-        next_box(birch_text)
-
+        #next_box(birch_text)
+        holly_molly_event()
         objects[2].process() 
         goob.draw(screen)
         goob.update()
