@@ -45,10 +45,18 @@ class Prize(): #Prize class with 3 variables and their getters
 
 
 
+text_box_state = {
+    'current_text': 0,
+    'active_texts': None
+}
+
 def next_box(event_texts):
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_RETURN]:#return is the enter button
-        for event_text in event_texts:
+    if text_box_state['active_texts'] != event_texts:
+            text_box_state['active_texts'] = event_texts
+            text_box_state["current_text"] = 0
+        
+    if text_box_state["current_text"] < len(event_texts):
+            event_text = text_box_state['active_texts'][text_box_state['current_text']]
             current_textbox = Textbox(event_text, text_font, screen_width, screen_height)
             current_textbox.draw(screen)
             
@@ -293,7 +301,7 @@ def incrementDayFunc():
     decide_event()
     return current_day
 
-birch_text = ["Goob do you like my hat?", "I can't take it off", "My branch dresser sneezed"]
+birch_text = ["Goob do you like my hat?", "I can't take it off", "My branch dresser sneezed"] #test data
     
 #Button(30, 30, 400, 100, 'Button One (onePress)', myFunction)
 #Button (30, 140, 400, 100, 'Button Two(multiPress)', myFunction, True) hold down the button for multiple inputs
@@ -309,6 +317,10 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
+                text_box_state['current_text'] += 1
     
     
     screen.fill("#AFEBFA")
