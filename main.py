@@ -241,7 +241,7 @@ while running:
         if not current_event.started:
             toggle_all_movement()
             current_event.start()
-            
+
         current_event.handle_input(events)
         current_event.update()
         current_event.draw(screen)
@@ -260,6 +260,7 @@ while running:
         screen.blit(year_surface,year_rect)
         #Actual game goes in here
         objects[2].process() 
+
         goob.draw(screen)
         goob.update()
 
