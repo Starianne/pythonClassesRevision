@@ -47,6 +47,7 @@ class Prize(): #Prize class with 3 variables and their getters
                 message = "You got " + self.name + " with 1 " + self.type + " in!"
         return message
 
+#i reallyyyyy dont want to move ts
 class Button():
     def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=False, onePress=False):
         self.x = x
@@ -110,6 +111,9 @@ screen = pygame.display.set_mode((screen_width, screen_height)) #coords so must 
 pygame.display.set_caption('Game 2')
 
 #game state vars
+global game_started
+game_started = False
+
 global game_active
 game_active = False
 
@@ -156,13 +160,17 @@ objects = []
 
 #since I only have a few buttons rn im not sure whether i move this yet
 
-def myFunction():
-    print('Button Pressed')
+def start_game_func():
+    global game_started 
+    game_started = True
+    print('started game') #to check in terminal remove later
+    make_game_active_func()
+    return game_started
 
-def startGameFunc():
-    global game_active 
+def make_game_active_func():
+    global game_active
     game_active = True
-    print('started game')
+    print('active game') #same as started game
     return game_active
 
 def tutorialFunc():
@@ -191,7 +199,7 @@ def toggle_all_movement():
 
 
 #events--------------------------------------------------------------------
-
+#uhhhh I'll fix this later
 global events
 events = ["birch", "thief", "pebble_art", "core_apple", "birds_eye", "holly_molly", "cratin", "sea_saw", "meowntain", "velcrows", "dont_mention_it"]
 
@@ -202,16 +210,16 @@ def decide_event():
 
 #-----------------------------------------------------------------------------------
 
-def incrementDayFunc():
+def increment_day_func():
     global current_day
     current_day += 1
     toggle_all_movement()
     decide_event()
     return current_day
 
-Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400, 100, 'Start Game', startGameFunc)
+Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400, 100, 'Start Game', start_game_func)
 Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, 'Read Tutorial', tutorialFunc)
-Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400, 100, 'Keep Going!', incrementDayFunc) #press this and current day goes up
+Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400, 100, 'Keep Going!', increment_day_func) #press this and current day goes up
  #temp for testing
 
 
@@ -226,7 +234,7 @@ while running:
     
     screen.fill("#AFEBFA")
 
-    if game_complete == False:
+    if game_started == False:
         screen.blit(title_surface,title_rect)
         objects[0].process() #start Game button
         objects[1].process() #tutorial button
@@ -235,7 +243,18 @@ while running:
             screen.blit(tutorial_surface, (100, 100))
 
     else:
-        screen.blit(end_surface,end_rect)
+        if game_active:
+            if not current_event:
+                screen.fill("#AFEBFA")
+                #next year button needs to call branch of events 
+                year_surface = text_font.render("GOOB - Day "+ str(current_day), False, "black").convert_alpha()
+                year_rect = year_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
+                screen.blit(year_surface,year_rect)
+                #Actual game goes in here
+                objects[2].process() 
+
+                goob.draw(screen)
+                goob.update()        
 
     if current_event:
         if not current_event.started:
@@ -251,18 +270,7 @@ while running:
             toggle_all_movement()
 
 
-    if game_active:
-        screen.fill("#AFEBFA") 
-       #next year button needs to call branch of events 
-      
-        year_surface = text_font.render("GOOB - Day "+ str(current_day), False, "black").convert_alpha()
-        year_rect = year_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
-        screen.blit(year_surface,year_rect)
-        #Actual game goes in here
-        objects[2].process() 
 
-        goob.draw(screen)
-        goob.update()
 
     pygame.display.flip()
     dt = clock.tick(60) / 1000

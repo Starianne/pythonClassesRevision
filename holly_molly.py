@@ -1,4 +1,3 @@
-import pygame
 from event_dialogue import EventDialogue
 Holly = None
 Holly_rect = None
