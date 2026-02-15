@@ -44,24 +44,49 @@ class Prize(): #Prize class with 3 variables and their getters
                 message = "You got " + self.name + " with 1 " + self.type + " in!"
         return message
 
+class Button():
+    def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=False, onePress=False):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.onclickFunction = onclickFunction
+        self.onePress = onePress
+        self.alreadyPressed = False
+
+        self.fillColors = {
+            'normal': "#FF4D21",
+            'hover' : "#EC6F6F",
+            'pressed': '#C5FAAF',
+        }
+
+        self.buttonSurface = pygame.Surface((self.width, self.height))
+        self.buttonRect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.buttonSurf = text_font.render(buttonText, True, 'white')
+        objects.append(self)
+
+    def process(self):
+        mousePos = pygame.mouse.get_pos()
+        self.buttonSurface.fill(self.fillColors['normal'])
+        if self.buttonRect.collidepoint(mousePos):
+            self.buttonSurface.fill(self.fillColors['hover'])
+            if pygame.mouse.get_pressed(num_buttons=3)[0]:
+                self.buttonSurface.fill(self.fillColors['pressed'])
+                if self.onePress:
+                    self.onclickFunction()
+                elif not self.alreadyPressed:
+                    self.onclickFunction()
+                    self.alreadyPressed = True
+            else:
+                self.alreadyPressed = False
+        self.buttonSurface.blit(self.buttonSurf, [
+            self.buttonRect.width/2 - self.buttonSurf.get_rect().width/2,
+            self.buttonRect.height/2 - self.buttonSurf.get_rect().height/2
+        ])
+        screen.blit(self.buttonSurface, self.buttonRect)
 
 
-text_box_state = {
-    'current_text': 0,
-    'active_texts': None
-}
-
-def next_box(event_texts):
-    if text_box_state['active_texts'] != event_texts:
-            text_box_state['active_texts'] = event_texts
-            text_box_state["current_text"] = 0
-        
-    if text_box_state["current_text"] < len(event_texts):
-            event_text = text_box_state['active_texts'][text_box_state['current_text']]
-            current_textbox = Textbox(event_text, text_font, screen_width, screen_height)
-            current_textbox.draw(screen)
-            
-        
+#removed the textbox stuff to put be organised by its own class so i dont have the circular imports anymore       
 
 #probably will change what i do with this later
 def day_events():
@@ -123,46 +148,6 @@ goob.add(Goob(4))
 objects = []
 
 #since I only have a few buttons rn im not sure whether i move this yet
-class Button():
-    def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=False, onePress=False):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.onclickFunction = onclickFunction
-        self.onePress = onePress
-        self.alreadyPressed = False
-
-        self.fillColors = {
-            'normal': "#FF4D21",
-            'hover' : "#EC6F6F",
-            'pressed': '#C5FAAF',
-        }
-
-        self.buttonSurface = pygame.Surface((self.width, self.height))
-        self.buttonRect = pygame.Rect(self.x, self.y, self.width, self.height)
-        self.buttonSurf = text_font.render(buttonText, True, 'white')
-        objects.append(self)
-
-    def process(self):
-        mousePos = pygame.mouse.get_pos()
-        self.buttonSurface.fill(self.fillColors['normal'])
-        if self.buttonRect.collidepoint(mousePos):
-            self.buttonSurface.fill(self.fillColors['hover'])
-            if pygame.mouse.get_pressed(num_buttons=3)[0]:
-                self.buttonSurface.fill(self.fillColors['pressed'])
-                if self.onePress:
-                    self.onclickFunction()
-                elif not self.alreadyPressed:
-                    self.onclickFunction()
-                    self.alreadyPressed = True
-            else:
-                self.alreadyPressed = False
-        self.buttonSurface.blit(self.buttonSurf, [
-            self.buttonRect.width/2 - self.buttonSurf.get_rect().width/2,
-            self.buttonRect.height/2 - self.buttonSurf.get_rect().height/2
-        ])
-        screen.blit(self.buttonSurface, self.buttonRect)
 
 def myFunction():
     print('Button Pressed')
@@ -209,26 +194,6 @@ def decide_event():
     match selected:
         case 0 :
             return birch_event()
-        case 1 :
-            return thief_event()
-        case 2 :
-            return pebble_art_event()
-        case 3 :
-            return core_apple_event()
-        case 4 :
-            return birds_eye_event()
-       # case 5 :
-        #    return holly_molly_event()
-        case 6 :
-            return cratin_event()
-        case 7 :
-            return sea_saw_event()
-        case 8 :
-            return meowntain_event()
-        case 9 :
-            return velcrows_event()
-        case 10 :
-            return dont_mention_it_event()
 
 #birch event
 
@@ -238,61 +203,6 @@ def birch_event():
     birch_surface.fill("green")
     screen.blit(birch_surface, (screen_width/6,screen_height/2))
     
-
-
-
-
-
-
-
-#thief event
-def thief_event():
-    pass
-
-
-# pebble art event
-def pebble_art_event():
-    pass
-
-
-#core apple event
-def core_apple_event():
-    pass
-
-
-#birds eye event
-def birds_eye_event():
-    pass
-
-
-#holly molly event
-#def holly_molly_event():
-   #pass
-
-
-#cratin event
-def cratin_event():
-    pass
-
-
-#sea saw event
-def sea_saw_event():
-    pass
-
-#meowntain event
-def meowntain_event():
-    pass
-
-
-#velcrows event
-def velcrows_event():
-    pass
-
-#dont mention it event
-def dont_mention_it_event():
-    pass
-
-
 #-----------------------------------------------------------------------------------
 
 def incrementDayFunc():
@@ -313,16 +223,13 @@ Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400,
  #temp for testing
 
 
+
 while running:
     #player inputs will be here
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RETURN:
-                text_box_state['current_text'] += 1
-    
     
     screen.fill("#AFEBFA")
 
@@ -342,8 +249,6 @@ while running:
         year_rect = year_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
         screen.blit(year_surface,year_rect)
         #Actual game goes in here
-        #next_box(birch_text)
-        holly_molly_event()
         objects[2].process() 
         goob.draw(screen)
         goob.update()

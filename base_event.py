@@ -9,5 +9,5 @@ class Event:
     def update(self, dt):
         pass
 
-    def draw(Self, screen):
+    def draw(self, screen):
         pass
