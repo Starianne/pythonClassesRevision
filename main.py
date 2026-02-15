@@ -1,11 +1,14 @@
 import pygame
-import spritesheet #wait
 from goobs import *
 from text_box import Textbox
 import os
 from sys import exit
 from random import randint
+from gamestate import GameState
 from holly_molly import holly_molly_event
+
+game_state = GameState()
+current_event = None
 
 def generate():
     container = ["an envelope", "a box", "a suitcase", "a chest"]
@@ -133,6 +136,10 @@ tutorial = False
 tutorial_surface = pygame.Surface((int(screen_width/2), int(screen_height/2)))
 tutorial_surface.fill("white")
 
+#end
+end_surface = text_font.render("Game 2 is over, well done!", False, "white").convert_alpha()
+end_rect = title_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
+
 #day:
 global current_day
 current_day = 0
@@ -141,7 +148,7 @@ current_day = 0
 #groups: 
 #player sprite group
 goob = pygame.sprite.GroupSingle()
-goob.add(Goob(4))
+goob.add(Goob(4, game_state))
 
 
 #buttons:
@@ -189,20 +196,10 @@ global events
 events = ["birch", "thief", "pebble_art", "core_apple", "birds_eye", "holly_molly", "cratin", "sea_saw", "meowntain", "velcrows", "dont_mention_it"]
 
 def decide_event():
-    events_length = len(events) - 1
-    selected = randint(0, events_length)
-    match selected:
-        case 0 :
-            return birch_event()
+    global current_event # setting this to holly molly event to test for now
+    current_event = holly_molly_event(game_state, text_font, (screen_width, screen_height))
 
-#birch event
 
-def birch_event():
-    screen.fill("#AFEBFA")
-    birch_surface = pygame.Surface((int(screen_width/16), int(screen_height/8)))
-    birch_surface.fill("green")
-    screen.blit(birch_surface, (screen_width/6,screen_height/2))
-    
 #-----------------------------------------------------------------------------------
 
 def incrementDayFunc():
@@ -211,11 +208,6 @@ def incrementDayFunc():
     toggle_all_movement()
     decide_event()
     return current_day
-
-birch_text = ["Goob do you like my hat?", "I can't take it off", "My branch dresser sneezed"] #test data
-    
-#Button(30, 30, 400, 100, 'Button One (onePress)', myFunction)
-#Button (30, 140, 400, 100, 'Button Two(multiPress)', myFunction, True) hold down the button for multiple inputs
 
 Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400, 100, 'Start Game', startGameFunc)
 Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, 'Read Tutorial', tutorialFunc)
@@ -226,20 +218,38 @@ Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400,
 
 while running:
     #player inputs will be here
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    for event in events:
         if event.type == pygame.QUIT:
             running = False
 
     
     screen.fill("#AFEBFA")
 
-    if game_complete == False and game_active == False:
+    if game_complete == False:
         screen.blit(title_surface,title_rect)
         objects[0].process() #start Game button
         objects[1].process() #tutorial button
     
-    if tutorial:
-        screen.blit(tutorial_surface, (100, 100))
+        if tutorial:
+            screen.blit(tutorial_surface, (100, 100))
+
+    else:
+        screen.blit(end_surface,end_rect)
+
+    if current_event:
+        if not current_event.started:
+            toggle_all_movement()
+            current_event.start()
+            
+        current_event.handle_input(events)
+        current_event.update()
+        current_event.draw(screen)
+
+        if current_event.done:
+            current_event = None
+            toggle_all_movement()
+
 
     if game_active:
         screen.fill("#AFEBFA") 
