@@ -5,6 +5,7 @@ import os
 from sys import exit
 from random import randint
 from gamestate import GameState
+from button import Button
 from holly_molly import holly_molly_event
 
 game_state = GameState()
@@ -47,47 +48,7 @@ class Prize(): #Prize class with 3 variables and their getters
                 message = "You got " + self.name + " with 1 " + self.type + " in!"
         return message
 
-#i reallyyyyy dont want to move ts
-class Button():
-    def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=False, onePress=False):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.onclickFunction = onclickFunction
-        self.onePress = onePress
-        self.alreadyPressed = False
-
-        self.fillColors = {
-            'normal': "#FF4D21",
-            'hover' : "#EC6F6F",
-            'pressed': '#C5FAAF',
-        }
-
-        self.buttonSurface = pygame.Surface((self.width, self.height))
-        self.buttonRect = pygame.Rect(self.x, self.y, self.width, self.height)
-        self.buttonSurf = text_font.render(buttonText, True, 'white')
-        objects.append(self)
-
-    def process(self):
-        mousePos = pygame.mouse.get_pos()
-        self.buttonSurface.fill(self.fillColors['normal'])
-        if self.buttonRect.collidepoint(mousePos):
-            self.buttonSurface.fill(self.fillColors['hover'])
-            if pygame.mouse.get_pressed(num_buttons=3)[0]:
-                self.buttonSurface.fill(self.fillColors['pressed'])
-                if self.onePress:
-                    self.onclickFunction()
-                elif not self.alreadyPressed:
-                    self.onclickFunction()
-                    self.alreadyPressed = True
-            else:
-                self.alreadyPressed = False
-        self.buttonSurface.blit(self.buttonSurf, [
-            self.buttonRect.width/2 - self.buttonSurf.get_rect().width/2,
-            self.buttonRect.height/2 - self.buttonSurf.get_rect().height/2
-        ])
-        screen.blit(self.buttonSurface, self.buttonRect)
+#i reallyyyyy dont want to move ts i have to noooooooooooooooooooo
 
 
 #removed the textbox stuff to put be organised by its own class so i dont have the circular imports anymore       
@@ -217,9 +178,14 @@ def increment_day_func():
     decide_event()
     return current_day
 
-Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400, 100, 'Start Game', start_game_func)
-Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, 'Read Tutorial', tutorialFunc)
-Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400, 100, 'Keep Going!', increment_day_func) #press this and current day goes up
+def pause_unpause_game_func():
+    global game_active
+    game_active = False if game_active == True else True
+    return game_active
+
+Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400, 100, 'Start Game', start_game_func, text_font, screen)
+Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, 'Read Tutorial', tutorialFunc, text_font, screen)
+Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400, 100, 'Keep Going!', increment_day_func, text_font, screen) #press this and current day goes up 
  #temp for testing
 
 
@@ -230,6 +196,8 @@ while running:
     for event in events:
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_p: #pauses game mostly except game dialogue but thats bc it just blits ontop of screen that jus changes color when you 'pause'
+            pause_unpause_game_func()
 
     
     screen.fill("#AFEBFA")
@@ -254,7 +222,10 @@ while running:
                 objects[2].process() 
 
                 goob.draw(screen)
-                goob.update()        
+                goob.update() 
+
+        else:
+            screen.fill("blue")       
 
     if current_event:
         if not current_event.started:

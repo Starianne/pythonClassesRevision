@@ -1,6 +1,9 @@
 import pygame
 from text_box import Textbox
 from base_event import BaseEvent
+from button import Button
+
+#tomorrow add in button for choices
 
 class EventDialogue(BaseEvent):
     def __init__(self, game_state, dialogue, font, screen_size):
@@ -29,3 +32,4 @@ class EventDialogue(BaseEvent):
     def draw(self, screen):
         if self.textbox:
             self.textbox.draw(screen)
+
