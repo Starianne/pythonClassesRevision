@@ -183,6 +183,10 @@ def pause_unpause_game_func():
     game_active = False if game_active == True else True
     return game_active
 
+def clear_event_buttons():
+    global objects
+    objects = objects[:3]
+
 Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400, 100, text_font, start_game_func, 'Start Game', screen)
 Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, text_font, tutorialFunc, 'Read Tutorial', screen)
 Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400, 100, text_font, increment_day_func, 'Keep Going!', screen) #press this and current day goes up 
@@ -225,6 +229,7 @@ while running:
 
             if current_event.done:
                 current_event = None
+                clear_event_buttons()
                 toggle_all_movement()
 
 
