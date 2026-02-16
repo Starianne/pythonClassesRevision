@@ -183,9 +183,9 @@ def pause_unpause_game_func():
     game_active = False if game_active == True else True
     return game_active
 
-Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400, 100, 'Start Game', start_game_func, text_font, screen)
-Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, 'Read Tutorial', tutorialFunc, text_font, screen)
-Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400, 100, 'Keep Going!', increment_day_func, text_font, screen) #press this and current day goes up 
+Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400, 100, text_font, start_game_func, 'Start Game', screen)
+Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, text_font, tutorialFunc, 'Read Tutorial', screen)
+Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400, 100, text_font, increment_day_func, 'Keep Going!', screen) #press this and current day goes up 
  #temp for testing
 
 
