@@ -210,9 +210,25 @@ while running:
         if tutorial:
             screen.blit(tutorial_surface, (100, 100))
 
-    else:
-        if game_active:
-            if not current_event:
+    else:        
+        if current_event:
+            if not current_event.started:
+                toggle_all_movement()
+                current_event.start()
+
+            current_event.handle_input(events)
+            current_event.update()
+            current_event.draw(screen)
+
+            for obj in objects:
+                obj.process()
+
+            if current_event.done:
+                current_event = None
+                toggle_all_movement()
+
+
+        elif game_active:
                 screen.fill("#AFEBFA")
                 #next year button needs to call branch of events 
                 year_surface = text_font.render("GOOB - Day "+ str(current_day), False, "black").convert_alpha()
@@ -224,24 +240,10 @@ while running:
                 goob.draw(screen)
                 goob.update() 
 
-        else:
-            screen.fill("blue")       
+        #else: temp
+            #screen.fill("blue")           
 
-    if current_event:
-        if not current_event.started:
-            toggle_all_movement()
-            current_event.start()
-
-        current_event.handle_input(events)
-        current_event.update()
-        current_event.draw(screen)
-
-        for obj in objects():
-            obj.process()
-
-        if current_event.done:
-            current_event = None
-            toggle_all_movement()
+    
 
 
 
