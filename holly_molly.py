@@ -53,7 +53,7 @@ def holly_molly_event(game_state, font, screen_size):
         },
             "holly_rewards" : {
             "character" : Holly,
-            "text" : "Since you made the OBVIOUS correct choice",
+            "text" : "Here, since you made the OBVIOUS correct choice",
             "options" : [],
             "next_states" : ["molly_grumbles"],
         },
