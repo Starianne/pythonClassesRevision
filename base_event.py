@@ -3,6 +3,9 @@ class BaseEvent:
         self.game_state = game_state
         self.done = False
         self.started = False
+        self.background = None
+        self.portraits = {}
+        self.current_speaker = None
 
     def start(self):
         self.started = True
@@ -14,4 +17,5 @@ class BaseEvent:
         pass
 
     def draw(self, screen):
-        pass
+        if self.background:
+            screen.blit(self.background, (0,0))

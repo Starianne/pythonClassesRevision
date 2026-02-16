@@ -6,12 +6,13 @@ from button import Button
 #tomorrow add in button for choices
 
 class EventDialogue(BaseEvent):
-    def __init__(self, game_state, dialogue, font, screen_size):
+    def __init__(self, game_state, dialogue, font, screen_size, background=None):
         super().__init__(game_state)
         self.dialogue = dialogue
         self.current_key = list(dialogue.keys())[0] #keys - this is a dictionary!!
         self.font = font
         self.screen_width, self.screen_height = screen_size
+        self.background = background
         self.textbox = None
         self.last_node = None
         self.screen = None
@@ -73,7 +74,20 @@ class EventDialogue(BaseEvent):
         
 
     def draw(self, screen):
-        self.screen = screen
+        if self.background:
+            screen.blit(self.background, (0,0))
+
+        node = self.dialogue[self.current_key]
+        character = node.get("character")
+
+        if character and character in self.portraits:
+            portrait = self.portraits[character]
+            screen.blit(portrait, (50, self.screen_height - portrait.get_height() - 150))
+
+            name_surf = self.font.render(character, True, "black")
+            screen.blit(name_surf, (50, self.screen_height - 200))
+
+
         if self.textbox:
             self.textbox.draw(screen)
 
