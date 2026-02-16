@@ -236,6 +236,9 @@ while running:
         current_event.update()
         current_event.draw(screen)
 
+        for obj in objects():
+            obj.process()
+
         if current_event.done:
             current_event = None
             toggle_all_movement()
