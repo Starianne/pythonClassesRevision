@@ -33,6 +33,7 @@ class EventDialogue(BaseEvent):
 
 
     def create_choice_buttons(self, options, next_states):
+        self.choice_buttons.clear()
         button_width = 400 
         button_height = 80
         spacing = 20
@@ -73,4 +74,7 @@ class EventDialogue(BaseEvent):
     def draw(self, screen):
         if self.textbox:
             self.textbox.draw(screen)
+
+        for btn in self.choice_buttons:
+            btn.process()
 

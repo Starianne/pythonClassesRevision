@@ -2,14 +2,19 @@ import pygame
 from goobs import *
 from text_box import Textbox
 import os
-from sys import exit
 from random import randint
 from gamestate import GameState
 from button import Button
+from event_manager import EventManager
 from holly_molly import holly_molly_event
 
 game_state = GameState()
-current_event = None
+
+event_manager = EventManager()
+
+start_buttons = []
+game_buttons = []
+event_buttons = []
 
 def generate():
     container = ["an envelope", "a box", "a suitcase", "a chest"]
@@ -48,19 +53,11 @@ class Prize(): #Prize class with 3 variables and their getters
                 message = "You got " + self.name + " with 1 " + self.type + " in!"
         return message
 
-#i reallyyyyy dont want to move ts i have to noooooooooooooooooooo
-
-
-#removed the textbox stuff to put be organised by its own class so i dont have the circular imports anymore       
-
 #probably will change what i do with this later
 def day_events():
     days = []
     for i in range(0,99):
         events = [ ]
-
-
-
 
 pygame.init()
 
@@ -165,8 +162,7 @@ global events
 events = ["birch", "thief", "pebble_art", "core_apple", "birds_eye", "holly_molly", "cratin", "sea_saw", "meowntain", "velcrows", "dont_mention_it"]
 
 def decide_event():
-    global current_event # setting this to holly molly event to test for now
-    current_event = holly_molly_event(game_state, text_font, (screen_width, screen_height))
+    event_manager.start_event(holly_molly_event(game_state, text_font, (screen_width, screen_height)))
 
 
 #-----------------------------------------------------------------------------------
@@ -187,10 +183,9 @@ def clear_event_buttons():
     global objects
     objects = objects[:3]
 
-Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400, 100, text_font, start_game_func, 'Start Game', screen)
-Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, text_font, tutorialFunc, 'Read Tutorial', screen)
-Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400, 100, text_font, increment_day_func, 'Keep Going!', screen) #press this and current day goes up 
- #temp for testing
+start_buttons.append(Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400, 100, text_font, start_game_func, 'Start Game', screen))
+start_buttons.append(Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, text_font, tutorialFunc, 'Read Tutorial', screen))
+game_buttons.append(Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400, 100, text_font, increment_day_func, 'Keep Going!', screen)) #press this and current day goes up 
 
 
 
@@ -208,42 +203,41 @@ while running:
 
     if game_started == False:
         screen.blit(title_surface,title_rect)
-        objects[0].process() #start Game button
-        objects[1].process() #tutorial button
+        for btn in start_buttons:
+            btn.process()
     
         if tutorial:
             screen.blit(tutorial_surface, (100, 100))
+     
+    elif current_event:
+        if not current_event.started:
+            toggle_all_movement()
+            current_event.start()
 
-    else:        
-        if current_event:
-            if not current_event.started:
-                toggle_all_movement()
-                current_event.start()
+        current_event.handle_input(events)
+        current_event.update()
+        current_event.draw(screen)
 
-            current_event.handle_input(events)
-            current_event.update()
-            current_event.draw(screen)
+        for btn in event_buttons:
+            btn.process()
 
-            for obj in objects:
-                obj.process()
-
-            if current_event.done:
-                current_event = None
-                clear_event_buttons()
-                toggle_all_movement()
+        if current_event.done:
+            current_event = None
+            clear_event_buttons()
+            toggle_all_movement()
 
 
-        elif game_active:
-                screen.fill("#AFEBFA")
-                #next year button needs to call branch of events 
-                year_surface = text_font.render("GOOB - Day "+ str(current_day), False, "black").convert_alpha()
-                year_rect = year_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
-                screen.blit(year_surface,year_rect)
-                #Actual game goes in here
-                objects[2].process() 
+    elif game_active:
+            screen.fill("#AFEBFA")
+            #next year button needs to call branch of events 
+            year_surface = text_font.render("GOOB - Day "+ str(current_day), False, "black").convert_alpha()
+            year_rect = year_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
+            screen.blit(year_surface,year_rect)
+            #Actual game goes in here
+            game_buttons[0].process() 
 
-                goob.draw(screen)
-                goob.update() 
+            goob.draw(screen)
+            goob.update() 
 
         #else: temp
             #screen.fill("blue")           

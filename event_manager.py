@@ -4,6 +4,9 @@ class EventManager:
 
     def start_event(self, event):
         self.current_event = event
+
+    def is_active(self):
+        return self.current_event is not None
     
     def update(self, events, screen):
         if not self.current_event:
