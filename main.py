@@ -209,22 +209,8 @@ while running:
         if tutorial:
             screen.blit(tutorial_surface, (100, 100))
      
-    elif current_event:
-        if not current_event.started:
-            toggle_all_movement()
-            current_event.start()
-
-        current_event.handle_input(events)
-        current_event.update()
-        current_event.draw(screen)
-
-        for btn in event_buttons:
-            btn.process()
-
-        if current_event.done:
-            current_event = None
-            clear_event_buttons()
-            toggle_all_movement()
+    elif event_manager.is_active():
+        event_manager.update(events, screen)
 
 
     elif game_active:

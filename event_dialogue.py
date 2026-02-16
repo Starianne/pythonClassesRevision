@@ -14,6 +14,7 @@ class EventDialogue(BaseEvent):
         self.screen_width, self.screen_height = screen_size
         self.textbox = None
         self.last_node = None
+        self.screen = None
 
         self.choice_buttons = []
         self.waiting_for_choice = False
@@ -47,7 +48,7 @@ class EventDialogue(BaseEvent):
             def hand_back_choice(state):
                 return lambda: self.choose(state) #like anonymous function in javascript
         
-            btn = Button(x, y, button_width, button_height, self.font, hand_back_choice(next_states[i]), option_text)
+            btn = Button(x, y, button_width, button_height, self.font, hand_back_choice(next_states[i]), option_text, self.screen)
             self.choice_buttons.append(btn)
 
     def choose(self, next_key):
@@ -72,6 +73,7 @@ class EventDialogue(BaseEvent):
         
 
     def draw(self, screen):
+        self.screen = screen
         if self.textbox:
             self.textbox.draw(screen)
 
