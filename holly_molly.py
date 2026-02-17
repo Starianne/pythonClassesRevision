@@ -2,7 +2,7 @@ import pygame
 from event_dialogue import EventDialogue
 
 
-def holly_molly_event(game_state, font, screen_size):
+def holly_molly_event(game_state, font, screen_size, screen=None):
     background = pygame.image.load("graphics/backgrounds/forest.png").convert()
     portraits = {"Holly" : pygame.image.load("graphics/portraits/placeholder.png").convert_alpha(), 
                  "Molly": pygame.image.load("graphics/portraits/placeholder.png").convert_alpha(),
@@ -77,7 +77,7 @@ def holly_molly_event(game_state, font, screen_size):
         },
     }
     
-    event = EventDialogue(game_state, event_dialogue, font, screen_size, background=background)
+    event = EventDialogue(game_state, event_dialogue, font, screen_size, background=background, screen=screen)
     event.portraits = portraits
     return event
 

@@ -5,7 +5,7 @@ from button import Button
 
 
 class EventDialogue(BaseEvent):
-    def __init__(self, game_state, dialogue, font, screen_size, background=None):
+    def __init__(self, game_state, dialogue, font, screen_size, background=None, screen=None):
         super().__init__(game_state)
         self.dialogue = dialogue
         self.current_key = list(dialogue.keys())[0] #keys - this is a dictionary!!
@@ -14,7 +14,7 @@ class EventDialogue(BaseEvent):
         self.background = background
         self.textbox = None
         self.last_node = None
-        self.screen = None
+        self.screen = screen
 
         self.choice_buttons = []
         self.waiting_for_choice = False
@@ -48,7 +48,7 @@ class EventDialogue(BaseEvent):
             def hand_back_choice(state):
                 return lambda: self.choose(state) #like anonymous function in javascript
         
-            btn = Button(x, y, button_width, button_height, self.font, hand_back_choice(next_states[i]), option_text, self.background)
+            btn = Button(x, y, button_width, button_height, self.font, hand_back_choice(next_states[i]), option_text, screen=self.screen)
             self.choice_buttons.append(btn)
 
     def choose(self, next_key):

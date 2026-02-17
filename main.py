@@ -149,7 +149,7 @@ global events
 events = ["birch", "thief", "pebble_art", "core_apple", "birds_eye", "holly_molly", "cratin", "sea_saw", "meowntain", "velcrows", "dont_mention_it"]
 
 def decide_event():
-    event_manager.start_event(holly_molly_event(game_state, text_font, (screen_width, screen_height)))
+    event_manager.start_event(holly_molly_event(game_state, text_font, (screen_width, screen_height), screen))
 
 
 #-----------------------------------------------------------------------------------
