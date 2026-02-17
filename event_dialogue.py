@@ -74,7 +74,8 @@ class EventDialogue(BaseEvent):
 
     def draw(self, screen):
         if self.background:
-            screen.blit(self.background, (0,0))
+            self.background = pygame.transform.scale(self.background, (self.screen_width, self.screen_height))
+            screen.blit(self.background, (0,0)) #transform scale then blit
 
         node = self.dialogue[self.current_key]
         character = node.get("character")
