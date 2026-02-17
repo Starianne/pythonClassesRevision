@@ -1,7 +1,7 @@
 import pygame
 
 class Button:
-    def __init__(self, x, y, width, height, font, onclick, text='Button', screen=None, target_list = None, one_press=False):
+    def __init__(self, x, y, width, height, font, onclick, text='Button', screen=None, one_press=False):
         #ordered to match main.py buttons
         self.rect = pygame.Rect(x, y, width, height)
         self.text = text

@@ -3,7 +3,6 @@ from text_box import Textbox
 from base_event import BaseEvent
 from button import Button
 
-#tomorrow add in button for choices
 
 class EventDialogue(BaseEvent):
     def __init__(self, game_state, dialogue, font, screen_size, background=None):
@@ -49,7 +48,7 @@ class EventDialogue(BaseEvent):
             def hand_back_choice(state):
                 return lambda: self.choose(state) #like anonymous function in javascript
         
-            btn = Button(x, y, button_width, button_height, self.font, hand_back_choice(next_states[i]), option_text, self.screen)
+            btn = Button(x, y, button_width, button_height, self.font, hand_back_choice(next_states[i]), option_text, self.background)
             self.choice_buttons.append(btn)
 
     def choose(self, next_key):

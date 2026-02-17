@@ -53,12 +53,6 @@ class Prize(): #Prize class with 3 variables and their getters
                 message = "You got " + self.name + " with 1 " + self.type + " in!"
         return message
 
-#probably will change what i do with this later
-def day_events():
-    days = []
-    for i in range(0,99):
-        events = [ ]
-
 pygame.init()
 
 os.environ['SDL_VIDEO_CENTERED'] = '1' #called after pygame.init()
@@ -112,12 +106,6 @@ current_day = 0
 goob = pygame.sprite.GroupSingle()
 goob.add(Goob(4, game_state))
 
-
-#buttons:
-objects = []
-
-#since I only have a few buttons rn im not sure whether i move this yet
-
 def start_game_func():
     global game_started 
     game_started = True
@@ -155,7 +143,6 @@ def toggle_all_movement():
     toggle_horizontal_movement()
     toggle_vertical_movement()
 
-
 #events--------------------------------------------------------------------
 #uhhhh I'll fix this later
 global events
@@ -179,15 +166,9 @@ def pause_unpause_game_func():
     game_active = False if game_active == True else True
     return game_active
 
-def clear_event_buttons():
-    global objects
-    objects = objects[:3]
-
 start_buttons.append(Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400, 100, text_font, start_game_func, 'Start Game', screen))
 start_buttons.append(Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, text_font, tutorialFunc, 'Read Tutorial', screen))
 game_buttons.append(Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400, 100, text_font, increment_day_func, 'Keep Going!', screen)) #press this and current day goes up 
-
-
 
 while running:
     #player inputs will be here
