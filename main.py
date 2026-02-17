@@ -97,9 +97,9 @@ main_surface = pygame.Surface((int(screen_width/3), int(screen_height/3)))
 main_surface.fill("white")
 main_rect = main_surface.get_rect(midbottom = (screen_width/2, screen_height/2))
 
-main_surface = pygame.Surface((int(screen_width/3), int(screen_height/3)))
-main_surface.fill("white")
-main_rect = main_surface.get_rect(midbottom = (screen_width/2, screen_height/2))
+main_surface_inside = pygame.Surface((int(screen_width/3), int(screen_height/4)))
+main_surface_inside.fill("#AFEBFA")
+main_rect_inside = main_surface_inside.get_rect(midbottom = (screen_width/2, 16*screen_height/35))
 
 #end
 end_surface = text_font.render("Game 2 is over, well done!", False, "white").convert_alpha()
@@ -206,22 +206,18 @@ while running:
     elif game_active:
             screen.fill("#AFEBFA")
             day_surface = text_font.render("GOOB - Day "+ str(current_day), False, "black").convert_alpha()
-            day_rect = day_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
+            day_rect = day_surface.get_rect(center = (screen_width/2, screen_height/16))
             screen.blit(day_surface,day_rect)
             screen.blit(main_surface, main_rect)
+            screen.blit(main_surface_inside,main_rect_inside)
             #Actual game goes in here
             game_buttons[0].process() 
 
             goob.draw(screen)
             goob.update() 
 
-        #else: temp
-            #screen.fill("blue")           
-
-    
-
-
-
+    else: #pause
+        screen.fill("blue")           
 
     pygame.display.flip()
     dt = clock.tick(60) / 1000
