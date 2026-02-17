@@ -4,7 +4,7 @@ import spritesheet
 
 #Goob's class
 class Goob(pygame.sprite.Sprite):
-    def __init__(self, scale, game_state):
+    def __init__(self, scale, game_state, x_pos = 100, y_pos = 100):
         super().__init__()
 
         self.game_state = game_state
@@ -14,12 +14,12 @@ class Goob(pygame.sprite.Sprite):
         self.scale = scale
         self.goob_index = 0
 
+        self.x_pos = x_pos
+        self.y_pos = y_pos
+
         # availability and invent
         self.horizontal_available = 1
         self.vertical_available = 1
-
-        self.x_pos = 100
-        self.y_pos = 100
 
         # goob frames
         goob_stand = goob_spritesheet.get_image(0, 24, 24, scale)
@@ -45,6 +45,8 @@ class Goob(pygame.sprite.Sprite):
         self.image = self.goob_walk[0]
         self.rect = self.image.get_rect(topleft=(self.x_pos, self.y_pos))
 
+        self.control_mode = "idle"
+
     # availability / inventory methods
     def get_horizontal_available(self):
         return self.horizontal_available
@@ -52,6 +54,11 @@ class Goob(pygame.sprite.Sprite):
     def get_vertical_available(self):
         return self.vertical_available
 
+    def idle_walk(self):
+        self.goob_index += 0.1
+        if self.goob_index >= len(self.goob_walk):
+            self.goob_index = 0
+        self.image = self.goob_walk[int(self.goob_index)]
 
     def animation_state(self, state):
         if state == "walk":
@@ -83,4 +90,7 @@ class Goob(pygame.sprite.Sprite):
             
 
     def update(self):
-        self.player_input()
+        if self.control_mode == "player": #will enable goob to move around in certain minigames
+            self.player_input()
+        elif self.control_mode == "idle":
+            self.idle_walk()

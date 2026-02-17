@@ -78,7 +78,6 @@ dt = 0
 
 
 #must be under pygame.init()
-
 #font:
 global text_font
 text_font = pygame.font.Font('font/TenorSans-Regular.ttf', 50)
@@ -93,13 +92,14 @@ tutorial_surface = pygame.Surface((int(screen_width/2), int(screen_height/2)))
 tutorial_surface.fill("white")
 
 #maingame:
-main_surface = pygame.Surface((int(screen_width/3), int(screen_height/3)))
-main_surface.fill("white")
-main_rect = main_surface.get_rect(midbottom = (screen_width/2, screen_height/2))
+main_surface = pygame.image.load('graphics/backgrounds/goobs_city.png').convert()
+main_surface = pygame.transform.scale(main_surface, (3*screen_width/5, 3*screen_height/5))
+main_rect = main_surface.get_rect(center = (2*screen_width/3, 2*screen_height/5))
 
-main_surface_inside = pygame.Surface((int(screen_width/3), int(screen_height/4)))
-main_surface_inside.fill("#AFEBFA")
-main_rect_inside = main_surface_inside.get_rect(midbottom = (screen_width/2, 16*screen_height/35))
+#terminal:
+terminal_surface = pygame.Surface((int(2*screen_width/7), int(5*screen_height/7)))
+terminal_surface.fill("#AFEBFA")
+terminal_rect = terminal_surface.get_rect(topleft = (screen_width/20, screen_height/10))
 
 #end
 end_surface = text_font.render("Game 2 is over, well done!", False, "white").convert_alpha()
@@ -113,13 +113,14 @@ current_day = 0
 #groups: 
 #player sprite group
 goob = pygame.sprite.GroupSingle()
-goob.add(Goob(4, game_state))
+goob.add(Goob(4, game_state, 2*screen_width/3, 2*screen_height/5 + screen_height/30))
 
 def start_game_func():
     global game_started 
     game_started = True
     print('started game') #to check in terminal remove later
     make_game_active_func()
+    toggle_all_movement()
     return game_started
 
 def make_game_active_func():
@@ -166,7 +167,6 @@ def decide_event():
 def increment_day_func():
     global current_day
     current_day += 1
-    toggle_all_movement()
     decide_event()
     return current_day
 
@@ -179,17 +179,17 @@ start_buttons.append(Button(7*screen_width/18, screen_height/2-(screen_height/10
 start_buttons.append(Button(7*screen_width/18, screen_height/2, 400, 100, text_font, tutorialFunc, 'Read Tutorial', screen))
 game_buttons.append(Button(7*screen_width/18, screen_height/2+(screen_height/4), 400, 100, text_font, increment_day_func, 'Keep Going!', screen)) #press this and current day goes up 
 
+#game loop -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 while running:
     #player inputs will be here
     events = pygame.event.get()
     for event in events:
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_p: #pauses game mostly except game dialogue but thats bc it just blits ontop of screen that jus changes color when you 'pause'
-            pause_unpause_game_func()
 
     
-    screen.fill("#AFEBFA")
+    screen.fill("#4595DF")
 
     if game_started == False:
         screen.blit(title_surface,title_rect)
@@ -204,20 +204,17 @@ while running:
 
 
     elif game_active:
-            screen.fill("#AFEBFA")
-            day_surface = text_font.render("GOOB - Day "+ str(current_day), False, "black").convert_alpha()
+            goob.sprite.control_mode = "idle"
+            day_surface = text_font.render("GOOB - Day "+ str(current_day), False, "white").convert_alpha()
             day_rect = day_surface.get_rect(center = (screen_width/2, screen_height/16))
             screen.blit(day_surface,day_rect)
             screen.blit(main_surface, main_rect)
-            screen.blit(main_surface_inside,main_rect_inside)
+            screen.blit(terminal_surface, terminal_rect)
             #Actual game goes in here
             game_buttons[0].process() 
 
             goob.draw(screen)
-            goob.update() 
-
-    else: #pause
-        screen.fill("blue")           
+            goob.update()          
 
     pygame.display.flip()
     dt = clock.tick(60) / 1000
