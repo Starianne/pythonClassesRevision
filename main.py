@@ -92,6 +92,15 @@ tutorial = False
 tutorial_surface = pygame.Surface((int(screen_width/2), int(screen_height/2)))
 tutorial_surface.fill("white")
 
+#maingame:
+main_surface = pygame.Surface((int(screen_width/3), int(screen_height/3)))
+main_surface.fill("white")
+main_rect = main_surface.get_rect(midbottom = (screen_width/2, screen_height/2))
+
+main_surface = pygame.Surface((int(screen_width/3), int(screen_height/3)))
+main_surface.fill("white")
+main_rect = main_surface.get_rect(midbottom = (screen_width/2, screen_height/2))
+
 #end
 end_surface = text_font.render("Game 2 is over, well done!", False, "white").convert_alpha()
 end_rect = title_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
@@ -166,9 +175,9 @@ def pause_unpause_game_func():
     game_active = False if game_active == True else True
     return game_active
 
-start_buttons.append(Button(screen_width/2-(screen_width/10), screen_height/2-(screen_height/10), 400, 100, text_font, start_game_func, 'Start Game', screen))
-start_buttons.append(Button(screen_width/2-(screen_width/10), screen_height/2, 400, 100, text_font, tutorialFunc, 'Read Tutorial', screen))
-game_buttons.append(Button(screen_width/2-(screen_width/10), screen_height/2+(screen_height/4), 400, 100, text_font, increment_day_func, 'Keep Going!', screen)) #press this and current day goes up 
+start_buttons.append(Button(7*screen_width/18, screen_height/2-(screen_height/10), 400, 100, text_font, start_game_func, 'Start Game', screen))
+start_buttons.append(Button(7*screen_width/18, screen_height/2, 400, 100, text_font, tutorialFunc, 'Read Tutorial', screen))
+game_buttons.append(Button(7*screen_width/18, screen_height/2+(screen_height/4), 400, 100, text_font, increment_day_func, 'Keep Going!', screen)) #press this and current day goes up 
 
 while running:
     #player inputs will be here
@@ -196,10 +205,10 @@ while running:
 
     elif game_active:
             screen.fill("#AFEBFA")
-            #next year button needs to call branch of events 
-            year_surface = text_font.render("GOOB - Day "+ str(current_day), False, "black").convert_alpha()
-            year_rect = year_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
-            screen.blit(year_surface,year_rect)
+            day_surface = text_font.render("GOOB - Day "+ str(current_day), False, "black").convert_alpha()
+            day_rect = day_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
+            screen.blit(day_surface,day_rect)
+            screen.blit(main_surface, main_rect)
             #Actual game goes in here
             game_buttons[0].process() 
 
