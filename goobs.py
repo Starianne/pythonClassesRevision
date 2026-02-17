@@ -55,11 +55,7 @@ class Goob(pygame.sprite.Sprite):
     def get_vertical_available(self):
         return self.vertical_available
 
-    def idle(self):
-        self.goob_index += 0.05
-        if self.goob_index >= len(self.goob_idle):
-            self.goob_index = 0
-        self.image = self.goob_idle[int(self.goob_index)]
+    
 
     def animation_state(self, state):
         if state == "walk":
@@ -67,10 +63,15 @@ class Goob(pygame.sprite.Sprite):
             if self.goob_index >= len(self.goob_walk):
                 self.goob_index = 0
             self.image = self.goob_walk[int(self.goob_index)]
+        if state == "idle":
+            self.goob_index += 0.05
+            if self.goob_index >= len(self.goob_idle):
+                self.goob_index = 0
+            self.image = self.goob_idle[int(self.goob_index)]
 
     def player_input(self):
         # only allow movement when available == 1
-        self.idle()
+        self.animation_state("idle")
         keys = pygame.key.get_pressed()
         if self.horizontal_available == 1:
             if keys[pygame.K_a] or keys[pygame.K_LEFT]:
@@ -95,4 +96,4 @@ class Goob(pygame.sprite.Sprite):
         if self.control_mode == "player": #will enable goob to move around in certain minigames
             self.player_input()
         elif self.control_mode == "idle":
-            self.idle()
+            self.animation_state("idle")
