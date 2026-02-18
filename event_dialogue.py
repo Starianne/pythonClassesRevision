@@ -68,6 +68,10 @@ class EventDialogue(BaseEvent):
             if options:
                 self.waiting_for_choice = True
                 self.create_choice_buttons(options, next_states) #lets hope this will work
+
+            reward = node.get("reward")
+            if reward:
+                reward(self.game_state)
         
         self.last_node = self.current_key
         

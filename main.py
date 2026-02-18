@@ -16,42 +16,6 @@ start_buttons = []
 game_buttons = []
 event_buttons = []
 
-def generate():
-    container = ["an envelope", "a box", "a suitcase", "a chest"]
-    types = ["money", "sweet","key"]
-    name = container[randint(0,3)]
-    type = types[randint(0,2)]
-    if type == "money":
-        value = 25 * randint(1, 15)
-    else:
-        value = randint(1,3)
-    return Prize(name, type, value)
-
-class Prize(): #Prize class with 3 variables and their getters
-    def __init__(self, name, type, value):
-        self.name = name
-        self.type = type
-        self.value = value
-
-    def getName(self):
-        return self.name
-    
-    def getType(self):
-        return self.type
-
-    def getValue(self):
-        return self.value
-    
-    def present(self):
-        message = ""
-        if self.type =="money":
-            message = "You got " + self.name + " with £" + str(self.value) + " in!"
-        else:
-            if self.value > 1:
-                message = "You got " + self.name + " with " + str(self.value) + " " + self.type + "s in!"
-            else: 
-                message = "You got " + self.name + " with 1 " + self.type + " in!"
-        return message
 
 pygame.init()
 
@@ -100,6 +64,35 @@ main_rect = main_surface.get_rect(center = (2*screen_width/3, 2*screen_height/5)
 terminal_surface = pygame.Surface((int(2*screen_width/7), int(5*screen_height/7)))
 terminal_surface.fill("#AFEBFA")
 terminal_rect = terminal_surface.get_rect(topleft = (screen_width/20, screen_height/10))
+
+#make function for text in terminal:
+def make_terminal(screen, game_state, font, rect):
+    padding = screen_height/45
+    y = rect.top + padding
+
+    pygame.draw.rect(screen, "#AFEBFA", rect)
+
+    title = font.render("Terminal:", True, "black")
+    screen.blit(title, (rect.left + padding, y))
+    y += screen_height/20
+
+    for log in game_state.event_log:
+        log_surf = font.render(log, True, "black")
+        screen.blit(log_surf, (rect.left + padding, y))
+        y += screen_height/25
+
+    stats = [
+        f"Money: £{game_state.money}",
+        f"Sweets: {game_state.sweets}",
+        f"Hats: {game_state.hats}",
+    ]
+    stats_y = rect.bottom - screen_height/5
+
+    for stat in stats:
+        stat_surf = font.render(stat, True, "black")
+        screen.blit(stat_surf, (rect.left + padding, stats_y))
+        stats_y += screen_height/20
+
 
 #end
 end_surface = text_font.render("Game 2 is over, well done!", False, "white").convert_alpha()
@@ -209,7 +202,7 @@ while running:
             day_rect = day_surface.get_rect(center = (screen_width/2, screen_height/16))
             screen.blit(day_surface,day_rect)
             screen.blit(main_surface, main_rect)
-            screen.blit(terminal_surface, terminal_rect)
+            make_terminal(screen, game_state, text_font, terminal_rect)
             #Actual game goes in here
             game_buttons[0].process() 
 

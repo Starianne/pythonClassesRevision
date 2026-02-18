@@ -55,8 +55,6 @@ class Goob(pygame.sprite.Sprite):
     def get_vertical_available(self):
         return self.vertical_available
 
-    
-
     def animation_state(self, state):
         if state == "walk":
             self.goob_index += 0.2
