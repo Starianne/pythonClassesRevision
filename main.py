@@ -2,11 +2,12 @@ import pygame
 from goobs import *
 from text_box import Textbox
 import os
-from random import randint
+import random
 from gamestate import GameState
 from button import Button
 from event_manager import EventManager
 from holly_molly import holly_molly_event
+from meowntain import meowntain_event
 
 game_state = GameState()
 
@@ -44,7 +45,7 @@ dt = 0
 #must be under pygame.init()
 #font:
 global text_font
-text_font = pygame.font.Font('font/TenorSans-Regular.ttf', 50)
+text_font = pygame.font.Font('font/DigitalDisco.ttf', 50)
 
 #intro:
 title_surface = text_font.render("Game 2", False, "white").convert_alpha()
@@ -72,7 +73,7 @@ def make_terminal(screen, game_state, font, rect):
 
     pygame.draw.rect(screen, "#AFEBFA", rect)
 
-    title = font.render("Terminal:", True, "black")
+    title = font.render("Goob's rewards:", True, "black")
     screen.blit(title, (rect.left + padding, y))
     y += screen_height/20
 
@@ -149,10 +150,11 @@ def toggle_all_movement():
 #events--------------------------------------------------------------------
 #uhhhh I'll fix this later
 global events
-events = ["birch", "thief", "pebble_art", "core_apple", "birds_eye", "holly_molly", "cratin", "sea_saw", "meowntain", "velcrows", "dont_mention_it"]
+event_pool = [holly_molly_event, meowntain_event]
 
 def decide_event():
-    event_manager.start_event(holly_molly_event(game_state, text_font, (screen_width, screen_height), screen))
+    event_func = random.choice(event_pool)
+    event_manager.start_event(event_func(game_state, text_font, (screen_width, screen_height), screen))
 
 
 #-----------------------------------------------------------------------------------

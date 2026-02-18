@@ -26,7 +26,7 @@ class GameState:
             self.add_log(f"Goob got +{amount} sweets")
 
     def add_hats(self, amount):
-        self.add_hats += amount
+        self.hats += amount
         if amount == 1:
             self.add_log(f"Goob got +{amount} hat")
         else:
