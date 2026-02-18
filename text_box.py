@@ -33,7 +33,7 @@ class Textbox():
         if current_line:
             lines.append(current_line)
 
-        return(lines)
+        return lines
 
     def draw(self, screen):
         self.message_back_surface.fill("white") #to cover old text box

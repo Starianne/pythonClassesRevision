@@ -189,7 +189,7 @@ while running:
     if game_started == False:
         screen.blit(title_surface,title_rect)
         for btn in start_buttons:
-            btn.process()
+            btn.process(events)
     
         if tutorial:
             screen.blit(tutorial_surface, (100, 100))
@@ -206,7 +206,7 @@ while running:
             screen.blit(main_surface, main_rect)
             make_terminal(screen, game_state, text_font, terminal_rect)
             #Actual game goes in here
-            game_buttons[0].process() 
+            game_buttons[0].process(events) 
 
             goob.draw(screen)
             goob.update()          

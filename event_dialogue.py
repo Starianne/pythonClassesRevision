@@ -25,10 +25,9 @@ class EventDialogue(BaseEvent):
 
         self.choice_buttons = []
         self.waiting_for_choice = False
-        self.input_locked = False
 
     def handle_input(self, events):
-        if self.waiting_for_choice or self.input_locked:
+        if self.waiting_for_choice:
             return
 
         for event in events:
@@ -37,16 +36,15 @@ class EventDialogue(BaseEvent):
 
                 if next_states:
                     self.current_key = next_states[0]
-                    self.input_locked = True
                 else:
                     self.done = True
 
     def create_choice_buttons(self, options, next_states):
         self.choice_buttons.clear()
 
-        button_width = 420
-        button_height = 90
-        spacing = 16
+        button_width = self.screen_width / 2
+        button_height = self.screen_height / 8
+        spacing = self.screen_height / 32
 
         total_height = len(options) * (button_height + spacing)
         start_y = self.screen_height - total_height - 80
@@ -70,7 +68,6 @@ class EventDialogue(BaseEvent):
         self.current_key = next_key
         self.waiting_for_choice = False
         self.choice_buttons.clear()
-        self.input_locked = True
 
     def update(self):
         node = self.dialogue[self.current_key]
@@ -97,10 +94,9 @@ class EventDialogue(BaseEvent):
             if reward:
                 reward(self.game_state)
 
-            self.input_locked = False
         self.last_node = self.current_key
 
-    def draw(self, screen):
+    def draw(self, screen, events):
         if self.background:
             screen.blit(self.background, (0, 0))
 
@@ -121,4 +117,4 @@ class EventDialogue(BaseEvent):
             self.textbox.draw(screen)
 
         for btn in self.choice_buttons:
-            btn.process()
+            btn.process(events)

@@ -120,8 +120,8 @@ def meowntain_event(game_state, font, screen_size, screen=None):
         "Meowntain_disagreement_1" : {
             "character" : "Meowchal",
             "text" : "..No? A meowntain, and a mousehill, that's how it goes.",
-            "options" : ["You know what, yeah sure.", "When have you ever seen a Meowntain OR a Mousehill?"],
-            "next_states" : ["Acceptance","Meowntain_disagreement_2"]
+            "options" : ["When have you ever seen a Meowntain OR a Mousehill?", "You know what, yeah sure."],
+            "next_states" : ["Meowntain_disagreement_2","Acceptance"]
         },
         "Meowntain_disagreement_2" : {
             "character" : "Meowchal",

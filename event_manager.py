@@ -17,7 +17,7 @@ class EventManager:
 
         self.current_event.handle_input(events)
         self.current_event.update()
-        self.current_event.draw(screen)
+        self.current_event.draw(screen, events)
 
         if self.current_event.done:
             self.current_event = None

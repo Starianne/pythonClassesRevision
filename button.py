@@ -8,8 +8,7 @@ class Button:
         self.onclick = onclick
         self.font = font
         self.screen = screen
-        self.one_press = one_press
-        self.already_pressed = False
+
 
         self.fill_colors = {
             'normal': "#FF4D21",
@@ -18,24 +17,58 @@ class Button:
         }
 
         self.surface = pygame.Surface((width, height))
-        self.text_surf = self.font.render(self.text, True, "White")
+        self.padding = 12
+        self.text_lines = self.wrap_text(self.text, (self.rect.width - self.padding * 2))
+        self.text_surfs = [
+            self.font.render(line.strip(), True, "white")
+            for line in self.text_lines #kind of like tertanary 
+        ]
 
-    def process(self):
+
+    def wrap_text(self, text, max_width):
+        words = text.split(" ") #splits text into array with words
+        lines = []
+        current_line = ""
+
+        for word in words:
+            test_line = current_line + (" " if current_line != "" else "") + word #ternary operators might be the goat
+            if self.font.size(test_line)[0] <= max_width:
+                current_line = test_line
+            else: 
+                lines.append(current_line)
+                current_line = word
+
+        if current_line:
+            lines.append(current_line)
+
+        return lines
+
+    def process(self, events):
         mouse = pygame.mouse.get_pos()
+        clicked = False
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                clicked = True
+        
         self.surface.fill(self.fill_colors['normal'])# draw normal state first
 
         if self.rect.collidepoint(mouse):
             self.surface.fill(self.fill_colors['hover'])
-            if pygame.mouse.get_pressed()[0]:
-                self.surface.fill(self.fill_colors['pressed'])
-                if self.one_press or not self.already_pressed:
-                    self.onclick()
-                    self.already_pressed = True
-            else:
-                self.already_pressed = False
 
-        if self.text_surf:
-            self.surface.blit(self.text_surf,self.text_surf.get_rect(center=self.surface.get_rect().center))
+        # click state
+            if clicked:
+                self.surface.fill(self.fill_colors['pressed'])
+                self.onclick()
+
+        if self.text_surfs:
+            total_text_height = sum(surf.get_height() for surf in self.text_surfs)
+            start_y = (self.surface.get_height() - total_text_height) // 2
+
+            for surf in self.text_surfs:
+                text_rect = surf.get_rect(centerx = self.surface.get_width() // 2, y = start_y)
+                self.surface.blit(surf, text_rect)
+                start_y += surf.get_height()
+
 
         if self.screen:
             self.screen.blit(self.surface, self.rect)
