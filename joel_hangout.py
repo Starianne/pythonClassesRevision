@@ -5,8 +5,8 @@ from event_dialogue import EventDialogue
 def joel_hangout_event(game_state, font, screen_size, screen=None):
     background = pygame.image.load("graphics/backgrounds/forest.png").convert()
     portraits = {
-        "Joel": pygame.image.load("graphics/portraits/placeholder.png").convert_alpha(),
-        "Jay": pygame.image.load("graphics/portraits/placeholder.png").convert_alpha(),
+        "Joel": pygame.image.load("graphics/portraits/joel.png").convert_alpha(),
+        "Jay": pygame.image.load("graphics/portraits/jay.png").convert_alpha(),
     }
 
     event_dialogue = {

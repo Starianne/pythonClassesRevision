@@ -3,9 +3,9 @@ from event_dialogue import EventDialogue
 
 
 def dont_mention_it_event(game_state, font, screen_size, screen=None):
-    background = pygame.image.load("graphics/backgrounds/forest.png").convert()
-    portraits = {"Joel" : pygame.image.load("graphics/portraits/placeholder.png").convert_alpha(), 
-                 "Jay": pygame.image.load("graphics/portraits/placeholder.png").convert_alpha(),
+    background = pygame.image.load("graphics/backgrounds/fridge.png").convert()
+    portraits = {"Joel" : pygame.image.load("graphics/portraits/joel.png").convert_alpha(), 
+                 "Jay": pygame.image.load("graphics/portraits/jay.png").convert_alpha(),
                  "Goob" : pygame.image.load("graphics/portraits/goob_sprite.png").convert_alpha(),
                  }
     event_dialogue = {

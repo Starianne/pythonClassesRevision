@@ -3,9 +3,9 @@ from event_dialogue import EventDialogue
 
 
 def jay_meet_event(game_state, font, screen_size, screen=None):
-    background = pygame.image.load("graphics/backgrounds/forest.png").convert()
+    background = pygame.image.load("graphics/backgrounds/city.png").convert()
     portraits = {
-        "Jay": pygame.image.load("graphics/portraits/placeholder.png").convert_alpha(),
+        "Jay": pygame.image.load("graphics/portraits/jay.png").convert_alpha(),
         "Goob": pygame.image.load("graphics/portraits/goob_sprite.png").convert_alpha(),
     }
 

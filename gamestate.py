@@ -16,14 +16,22 @@ class GameState:
 
     def add_money(self, amount):
         self.money += amount
-        self.add_log(f"Goob got +£{amount}")
+        if amount > 0:
+            self.add_log(f"Goob got +£{amount}")
+        else: 
+            self.add_log(f"Goob lost £{-1*amount}")
 
     def add_sweets(self, amount):
         self.sweets += amount
         if amount == 1:
             self.add_log(f"Goob got +{amount} sweet")
+        elif amount == -1:
+            self.add_log(f"Goob lost {-1*amount} sweet")
         else:
-            self.add_log(f"Goob got +{amount} sweets")
+            if amount > 0:
+                self.add_log(f"Goob got +{amount} sweets")
+            else: 
+                self.add_log(f"Goob lost {-1*amount} sweets")
 
     def add_hats(self, amount):
         self.hats += amount

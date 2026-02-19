@@ -5,8 +5,8 @@ from event_dialogue import EventDialogue
 def holly_uni_event(game_state, font, screen_size, screen=None):
     background = pygame.image.load("graphics/backgrounds/forest.png").convert()
     portraits = {
-        "Holly": pygame.image.load("graphics/portraits/placeholder.png").convert_alpha(),
-        "Molly": pygame.image.load("graphics/portraits/placeholder.png").convert_alpha(),
+        "Holly": pygame.image.load("graphics/portraits/holly.png").convert_alpha(),
+        "Molly": pygame.image.load("graphics/portraits/molly.png").convert_alpha(),
     }
 
     event_dialogue = {

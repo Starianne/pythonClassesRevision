@@ -5,7 +5,7 @@ from event_dialogue import EventDialogue
 def molly_advice_event(game_state, font, screen_size, screen=None):
     background = pygame.image.load("graphics/backgrounds/forest.png").convert()
     portraits = {
-        "Molly": pygame.image.load("graphics/portraits/placeholder.png").convert_alpha(),
+        "Molly": pygame.image.load("graphics/portraits/molly.png").convert_alpha(),
         "Goob": pygame.image.load("graphics/portraits/goob_sprite.png").convert_alpha(),
     }
 
@@ -30,9 +30,9 @@ def molly_advice_event(game_state, font, screen_size, screen=None):
         },
         "molly_options": {
             "character": "Molly",
-            "text": "She loves anything cute, but like maybe books would be better? Or even a massive thing of sweets",
-            "options": ["Get a cute gift", "Get a book", "Give her sweets"],
-            "next_states": ["goob_cute", "goob_practical", "goob_sweets"],
+            "text": "She loves anything cute, but like maybe books would be better? And like with a massive thing of sweets",
+            "options": ["Get a cute gift", "Get a book"],
+            "next_states": ["goob_cute", "goob_practical"],
         },
         "goob_cute": {
             "character": "Molly",

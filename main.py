@@ -67,17 +67,16 @@ dt = 0
 
 #must be under pygame.init()
 #font:
+global title_font
+title_font = pygame.font.Font('font/DigitalDisco.ttf', 50)
+
 global text_font
-text_font = pygame.font.Font('font/DigitalDisco.ttf', 50)
+text_font = pygame.font.Font('font/DigitalDisco.ttf', 25)
+
 
 #intro:
-title_surface = text_font.render("Game 2", False, "white").convert_alpha()
+title_surface = title_font.render("Game 2", False, "white").convert_alpha()
 title_rect = title_surface.get_rect(center = (screen_width/2, (screen_height/2)-200))
-
-#tutorial:
-tutorial = False
-tutorial_surface = pygame.Surface((int(screen_width/2), int(screen_height/2)))
-tutorial_surface.fill("white")
 
 #maingame:
 main_surface = pygame.image.load('graphics/backgrounds/goobs_city.png').convert()
@@ -90,13 +89,13 @@ terminal_surface.fill("#AFEBFA")
 terminal_rect = terminal_surface.get_rect(topleft = (screen_width/20, screen_height/10))
 
 #make function for text in terminal:
-def make_terminal(screen, game_state, font, rect):
+def make_terminal(screen, game_state, font, title_font, rect):
     padding = screen_height/45
     y = rect.top + padding
 
     pygame.draw.rect(screen, "#AFEBFA", rect)
 
-    title = font.render("Goob's rewards:", True, "black")
+    title = title_font.render("Goob's rewards:", True, "black")
     screen.blit(title, (rect.left + padding, y))
     y += screen_height/20
 
@@ -105,15 +104,21 @@ def make_terminal(screen, game_state, font, rect):
         screen.blit(log_surf, (rect.left + padding, y))
         y += screen_height/25
 
+    def format_stat(label, value, prefix=""):
+        if value < 0:
+            return f"{label}: -{prefix}{abs(value)}"
+        else:
+            return f"{label}: {prefix}{value}"
+
     stats = [
-        f"Money: £{game_state.money}",
-        f"Sweets: {game_state.sweets}",
-        f"Hats: {game_state.hats}",
+        format_stat("Money", game_state.money, "£"),
+        format_stat("Sweets", game_state.sweets),
+        format_stat("Hats", game_state.hats),
     ]
     stats_y = rect.bottom - screen_height/5
 
     for stat in stats:
-        stat_surf = font.render(stat, True, "black")
+        stat_surf = title_font.render(stat, True, "black")
         screen.blit(stat_surf, (rect.left + padding, stats_y))
         stats_y += screen_height/20
 
@@ -372,9 +377,8 @@ def pause_unpause_game_func():
     game_active = False if game_active == True else True
     return game_active
 
-start_buttons.append(Button(7*screen_width/18, screen_height/2-(screen_height/10), 400, 100, text_font, start_game_func, 'Start Game', screen))
-start_buttons.append(Button(7*screen_width/18, screen_height/2, 400, 100, text_font, tutorialFunc, 'Read Tutorial', screen))
-game_buttons.append(Button(7*screen_width/18, screen_height/2+(screen_height/4), 400, 100, text_font, increment_day_func, 'Keep Going!', screen)) #press this and current day goes up 
+start_buttons.append(Button(7*screen_width/18, screen_height/2-(screen_height/10), 400, 100, title_font, start_game_func, 'Start Game', screen))
+game_buttons.append(Button(7*screen_width/18, screen_height/2+(screen_height/4), 400, 100, title_font, increment_day_func, 'Get through the day', screen)) #press this and current day goes up 
 
 #game loop -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -392,9 +396,6 @@ while running:
         screen.blit(title_surface,title_rect)
         for btn in start_buttons:
             btn.process(events)
-    
-        if tutorial:
-            screen.blit(tutorial_surface, (100, 100))
 
     elif game_complete and not event_manager.is_active():
         print("game complete")
@@ -406,11 +407,11 @@ while running:
 
     elif game_active:
             goob.sprite.control_mode = "idle"
-            day_surface = text_font.render("GOOB - Day "+ str(current_day), False, "white").convert_alpha()
+            day_surface = title_font.render("GOOB - Day "+ str(current_day), False, "white").convert_alpha()
             day_rect = day_surface.get_rect(center = (screen_width/2, screen_height/16))
             screen.blit(day_surface,day_rect)
             screen.blit(main_surface, main_rect)
-            make_terminal(screen, game_state, text_font, terminal_rect)
+            make_terminal(screen, game_state, text_font, title_font, terminal_rect)
             #Actual game goes in here
             game_buttons[0].process(events) 
 

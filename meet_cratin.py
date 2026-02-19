@@ -3,8 +3,8 @@ from event_dialogue import EventDialogue
 
 
 def meet_cratin_event(game_state, font, screen_size, screen=None):
-    background = pygame.image.load("graphics/backgrounds/forest.png").convert()
-    portraits = {"Cratin" : pygame.image.load("graphics/portraits/placeholder.png").convert_alpha(), 
+    background = pygame.image.load("graphics/backgrounds/city.png").convert()
+    portraits = {"Cratin" : pygame.image.load("graphics/portraits/cratin.png").convert_alpha(), 
                  "Goob" : pygame.image.load("graphics/portraits/goob_sprite.png").convert_alpha(),
                  }
     event_dialogue = {
@@ -26,7 +26,7 @@ def meet_cratin_event(game_state, font, screen_size, screen=None):
             "next_states" : ["goob_square_up_2"]
         },
         "goob_square_up_2" : {
-            "character" : "Goob",
+            "character" : "Cratin",
             "text" : "YOU WATCH WHERE YOU'RE GOING",
             "options" : [],
             "next_states" : ["goob_insults"]

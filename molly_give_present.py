@@ -3,9 +3,9 @@ from event_dialogue import EventDialogue
 
 
 def molly_give_present_event(game_state, font, screen_size, screen=None):
-    background = pygame.image.load("graphics/backgrounds/forest.png").convert()
+    background = pygame.image.load("graphics/backgrounds/city.png").convert()
     portraits = {
-        "Holly": pygame.image.load("graphics/portraits/placeholder.png").convert_alpha(),
+        "Holly": pygame.image.load("graphics/portraits/holly.png").convert_alpha(),
         "Goob": pygame.image.load("graphics/portraits/goob_sprite.png").convert_alpha(),
     }
 

@@ -5,7 +5,7 @@ class Textbox():
     def __init__(self, text, font, screen_width, screen_height):
         self.text = text
         self.font = font
-        self.x, self.y = screen_width/3, screen_height/3
+        self.x, self.y = screen_width/3, 2*screen_height/3
 
         self.line_width = screen_width//3
         self.padding = 10

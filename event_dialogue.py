@@ -43,7 +43,7 @@ class EventDialogue(BaseEvent):
         self.choice_buttons.clear()
 
         button_width = self.screen_width / 2
-        button_height = self.screen_height / 8
+        button_height = self.screen_height / 16
         spacing = self.screen_height / 252
 
         total_height = len(options) * (button_height + spacing)
@@ -111,7 +111,18 @@ class EventDialogue(BaseEvent):
             )
 
             name_surf = self.font.render(character, True, "black")
-            screen.blit(name_surf, (50, self.screen_height - 200))
+            name_rect = name_surf.get_rect()
+            name_rect.topleft = (100, self.screen_height - 600)
+            # Draw white background rectangle with a little padding
+            padding = 8
+            bg_rect = pygame.Rect(
+                name_rect.left - padding,
+                name_rect.top - padding,
+                name_rect.width + 2 * padding,
+                name_rect.height + 2 * padding
+            )
+            pygame.draw.rect(screen, ("white"), bg_rect)
+            screen.blit(name_surf, name_rect.topleft)
 
         if self.textbox:
             self.textbox.draw(screen)

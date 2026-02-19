@@ -4,9 +4,9 @@ from event_dialogue import EventDialogue
 
 def meowntain_event(game_state, font, screen_size, screen=None):
     background = pygame.image.load("graphics/backgrounds/forest.png").convert()
-    portraits = {"Meowchal" : pygame.image.load("graphics/portraits/placeholder.png").convert_alpha(), 
+    portraits = {"Meowchal" : pygame.image.load("graphics/portraits/meowchal.png").convert_alpha(), 
                  "Goob" : pygame.image.load("graphics/portraits/goob_sprite.png").convert_alpha(),
-                 "The Overbearing Meowntain of Cats" : pygame.image.load("graphics/portraits/placeholder.png").convert_alpha(), 
+                 "The Overbearing Meowntain of Cats" : pygame.image.load("graphics/portraits/meowntain.png").convert_alpha(), 
                  }
     event_dialogue = {
         "goob_start" : {
