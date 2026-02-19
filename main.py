@@ -8,8 +8,17 @@ from button import Button
 from event_manager import EventManager
 from ending_manager import select_ending
 from holly_molly import holly_molly_event
+from holly_advice import holly_advice_event
+from holly_uni import holly_uni_event
+from molly_real_name import molly_real_name_event
+from molly_advice import molly_advice_event
+from molly_plan_present import molly_plan_present_event
+from molly_give_present import molly_give_present_event
 from meowntain import meowntain_event
 from dont_mention_it import dont_mention_it_event
+from jay_stops import jay_stops_event
+from jay_meet import jay_meet_event
+from joel_hangout import joel_hangout_event
 from meet_cratin import meet_cratin_event
 
 
@@ -159,8 +168,50 @@ event_pool = [
         "event_name" : holly_molly_event,
         "requires" : [],
         "blocks" : [],
-        "once" : False,
-        "flag" : None,
+        "once" : True,
+        "flag" : "did_holly_molly_event",
+    },
+    {
+        "event_name" : holly_advice_event,
+        "requires" : ["did_holly_molly_event"],
+        "blocks" : [],
+        "once" : True,
+        "flag" : "did_holly_advice_event",
+    },
+    {
+        "event_name" : holly_uni_event,
+        "requires" : ["did_holly_advice_event"],
+        "blocks" : [],
+        "once" : True,
+        "flag" : "did_holly_uni_event",
+    },
+    {
+        "event_name" : molly_real_name_event,
+        "requires" : ["did_holly_molly_event"],
+        "blocks" : [],
+        "once" : True,
+        "flag" : "did_molly_real_name_event",
+    },
+    {
+        "event_name" : molly_advice_event,
+        "requires" : ["did_holly_molly_event"],
+        "blocks" : [],
+        "once" : True,
+        "flag" : "did_molly_advice_event",
+    },
+    {
+        "event_name" : molly_plan_present_event,
+        "requires" : ["did_molly_advice_event"],
+        "blocks" : [],
+        "once" : True,
+        "flag" : "did_molly_plan_present_event",
+    },
+    {
+        "event_name" : molly_give_present_event,
+        "requires" : ["did_molly_plan_present_event"],
+        "blocks" : [],
+        "once" : True,
+        "flag" : "did_molly_give_present_event",
     },
     {
         "event_name" : dont_mention_it_event,
@@ -168,6 +219,27 @@ event_pool = [
         "blocks" : [],
         "once" : True,
         "flag" : "did_dont_mention_it",
+    },
+    {
+        "event_name" : jay_stops_event,
+        "requires" : ['liar'],
+        "blocks" : [],
+        "once" : True,
+        "flag" : "did_jay_stops_event",
+    },
+    {
+        "event_name" : jay_meet_event,
+        "requires" : ['honest'],
+        "blocks" : [],
+        "once" : True,
+        "flag" : "did_jay_meet_event",
+    },
+    {
+        "event_name" : joel_hangout_event,
+        "requires" : ["did_jay_meet_event"],
+        "blocks" : [],
+        "once" : True,
+        "flag" : "did_joel_hangout_event",
     },
     {
         "event_name" : meowntain_event,

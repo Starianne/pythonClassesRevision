@@ -50,7 +50,7 @@ def holly_molly_event(game_state, font, screen_size, screen=None):
             "text" : "Take this, since you weren't a moron",
             "options" : [],
             "next_states" : ["holly_grumbles"],
-            "reward" : lambda give_sweets: give_sweets.add_sweets(2)
+            "reward" : lambda give_sweets: give_sweets.add_sweets(1)
         },
             "holly_rewards" : {
             "character" : 'Holly',
