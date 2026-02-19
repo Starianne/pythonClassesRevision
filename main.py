@@ -6,8 +6,12 @@ import random
 from gamestate import GameState
 from button import Button
 from event_manager import EventManager
+from ending_manager import select_ending
 from holly_molly import holly_molly_event
 from meowntain import meowntain_event
+from dont_mention_it import dont_mention_it_event
+from meet_cratin import meet_cratin_event
+
 
 game_state = GameState()
 
@@ -148,22 +152,75 @@ def toggle_all_movement():
     toggle_vertical_movement()
 
 #events--------------------------------------------------------------------
-#uhhhh I'll fix this later
+#uhhhh remakeeee
 global events
-event_pool = [holly_molly_event, meowntain_event]
+event_pool = [
+    {
+        "event_name" : holly_molly_event,
+        "requires" : [],
+        "blocks" : [],
+        "once" : False,
+        "flag" : None,
+    },
+    {
+        "event_name" : dont_mention_it_event,
+        "requires" : [],
+        "blocks" : [],
+        "once" : True,
+        "flag" : "did_dont_mention_it",
+    },
+    {
+        "event_name" : meowntain_event,
+        "requires" : [],
+        "blocks" : [],
+        "once" : True,
+        "flag" : "did_meowntain_event",
+    },
+    {
+        "event_name" : meet_cratin_event,
+        "requires" : [],
+        "blocks" : [],
+        "once" : True,
+        "flag" : "did_meet_cratin_event",
+    },
+]
 
 def decide_event():
-    event_func = random.choice(event_pool)
-    event_manager.start_event(event_func(game_state, text_font, (screen_width, screen_height), screen))
+    valid_events = []
+
+    for event in event_pool:
+        if not all(game_state.get_flag(f) for f in event.get("requires", [])):
+            continue
+
+        if any(game_state.get_flag(f) for f in event.get("blocks", [])):
+            continue
+
+        if event.get("once") and game_state.get_flag(event.get("flag")):
+            continue
+
+        valid_events.append(event)
+    
+    if not valid_events:
+        return
+    
+    chosen = random.choice(valid_events)
+    event_manager.start_event(chosen["event_name"](game_state, text_font, (screen_width, screen_height), screen), flag=chosen.get("flag"))
 
 
 #-----------------------------------------------------------------------------------
+MAX_DAYS = 25
 
 def increment_day_func():
-    global current_day
+    global current_day, game_complete
     current_day += 1
+
+    if current_day >= MAX_DAYS:
+        ending = select_ending(game_state)
+        event_manager.start_event(ending["event"](game_state, text_font, (screen_width, screen_height), screen))
+        game_complete = True
+        return
     decide_event()
-    return current_day
+    return current_day, game_complete
 
 def pause_unpause_game_func():
     global game_active
@@ -193,6 +250,10 @@ while running:
     
         if tutorial:
             screen.blit(tutorial_surface, (100, 100))
+
+    elif game_complete and not event_manager.is_active():
+        print("game complete")
+        running = False       
      
     elif event_manager.is_active():
         event_manager.update(events, screen)
@@ -209,7 +270,7 @@ while running:
             game_buttons[0].process(events) 
 
             goob.draw(screen)
-            goob.update()          
+            goob.update()   
 
     pygame.display.flip()
     dt = clock.tick(60) / 1000
