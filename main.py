@@ -382,10 +382,7 @@ def pause_unpause_game_func():
 start_buttons.append(Button(7*screen_width/18, screen_height/2-(screen_height/10), 400, 100, title_font, start_game_func, 'Start Game', screen))
 game_buttons.append(Button(7*screen_width/18, screen_height/2+(screen_height/4), 400, 100, title_font, increment_day_func, 'Get through the day', screen)) #press this and current day goes up 
 
-#game loop -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-async def run():
-    global running, game_started, game_complete, game_active, current_day
-    while running:
+while running:
         #player inputs will be here
         events = pygame.event.get()
         for event in events:
@@ -422,9 +419,7 @@ async def run():
                 goob.update()   
 
         pygame.display.flip()
-        await asyncio.sleep(0)
         dt = clock.tick(60) / 1000
-    pygame.quit()
+pygame.quit()
 
-if __name__ == "__main__":
-    asyncio.run(run())
+    
