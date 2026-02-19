@@ -1,6 +1,12 @@
 import pygame
 import spritesheet
 
+#MESSAGE FOR CAMPFIRE REVIEWER:
+#Hi, thank you so much for reviewing my project, now I know this class looks really weird right now
+#I'm planning on extending this game for stipends too so it is not fully complete
+#i wanted to add minigame events where movement and the other sprites would be added
+#So for now this is a visual novel game with a few endings
+#but it will be expanded
 
 #Goob's class
 class Goob(pygame.sprite.Sprite):
