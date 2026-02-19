@@ -37,6 +37,7 @@ def holly_advice_event(game_state, font, screen_size, screen=None):
             "text": "I think you should do it. It's your life, not hers, and maybe she'll be happy for you?",
             "options": [],
             "next_states": ["holly_decides_yes"],
+            "reward"  :lambda gs: gs.set_flag("uni")
         },
         "goob_warns": {
             "character": "Goob",

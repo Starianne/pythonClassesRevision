@@ -2,7 +2,7 @@ import pygame
 from event_dialogue import EventDialogue
 
 
-def find_hat_event(game_state, font, screen_size, screen=None):
+def lose_money_5_event(game_state, font, screen_size, screen=None):
     background = pygame.image.load("graphics/backgrounds/forest.png").convert()
     portraits = {
         "Goob": pygame.image.load("graphics/portraits/goob_sprite.png").convert_alpha(),
@@ -11,22 +11,16 @@ def find_hat_event(game_state, font, screen_size, screen=None):
     event_dialogue = {
         "start": {
             "character": "Goob",
-            "text": "Huh. A hat.",
+            "text": "WOW, it's windy!",
             "options": [],
-            "next_states": ["decision"],
+            "next_states": ["take_it"],
         },
-        "decision": {
+        "take_it": {
             "character": "Goob",
-            "text": "No one's using it.",
-            "options": [],
-            "next_states": ["take_hat"],
-        },
-        "take_hat": {
-            "character": "Goob",
-            "text": "I look better already.",
+            "text": "Oh No! My fiver!",
             "options": [],
             "next_states": [],
-            "reward": lambda gs: gs.add_hats(1),
+            "reward": lambda give_money: give_money.add_money(-5),
         },
     }
 

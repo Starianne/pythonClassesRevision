@@ -44,7 +44,7 @@ class EventDialogue(BaseEvent):
 
         button_width = self.screen_width / 2
         button_height = self.screen_height / 8
-        spacing = self.screen_height / 32
+        spacing = self.screen_height / 252
 
         total_height = len(options) * (button_height + spacing)
         start_y = self.screen_height - total_height - 80

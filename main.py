@@ -7,6 +7,15 @@ from gamestate import GameState
 from button import Button
 from event_manager import EventManager
 from ending_manager import select_ending
+
+from find_money_5 import find_money_5_event
+from lose_money_5 import lose_money_5_event
+from find_money_10 import find_money_10_event
+from lose_money_10 import lose_money_10_event
+from find_sweet import find_sweet_event
+from lose_sweet import lose_sweet_event
+from find_hat import find_hat_event
+from lose_hat import lose_hat_event
 from holly_molly import holly_molly_event
 from holly_advice import holly_advice_event
 from holly_uni import holly_uni_event
@@ -20,6 +29,7 @@ from jay_stops import jay_stops_event
 from jay_meet import jay_meet_event
 from joel_hangout import joel_hangout_event
 from meet_cratin import meet_cratin_event
+from learn_cratin import learn_cratin_event
 
 
 game_state = GameState()
@@ -165,6 +175,62 @@ def toggle_all_movement():
 global events
 event_pool = [
     {
+        "event_name" : find_money_5_event,
+        "requires" : [],
+        "blocks" : [],
+        "once" : False,
+        "flag" : None,
+    },
+    {
+        "event_name" : lose_money_5_event,
+        "requires" : [],
+        "blocks" : [],
+        "once" : False,
+        "flag" : None,
+    },
+    {
+        "event_name" : find_money_10_event,
+        "requires" : [],
+        "blocks" : [],
+        "once" : False,
+        "flag" : None,
+    },
+    {
+        "event_name" : lose_money_10_event,
+        "requires" : [],
+        "blocks" : [],
+        "once" : False,
+        "flag" : None,
+    },
+    {
+        "event_name" : find_sweet_event,
+        "requires" : [],
+        "blocks" : [],
+        "once" : False,
+        "flag" : None,
+    },
+    {
+        "event_name" : lose_sweet_event,
+        "requires" : [],
+        "blocks" : [],
+        "once" : False,
+        "flag" : None,
+    },
+    {
+        "event_name" : find_hat_event,
+        "requires" : [],
+        "blocks" : [],
+        "once" : False,
+        "flag" : None,
+    },
+    {
+        "event_name" : lose_hat_event,
+        "requires" : [],
+        "blocks" : [],
+        "once" : False,
+        "flag" : "None",
+    },
+    {
         "event_name" : holly_molly_event,
         "requires" : [],
         "blocks" : [],
@@ -254,6 +320,13 @@ event_pool = [
         "blocks" : [],
         "once" : True,
         "flag" : "did_meet_cratin_event",
+    },
+    {
+        "event_name" : learn_cratin_event,
+        "requires" : ["did_meet_cratin_event"],
+        "blocks" : [],
+        "once" : True,
+        "flag" : "did_learn_cratin_event",
     },
 ]
 
