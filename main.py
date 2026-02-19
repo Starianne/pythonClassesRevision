@@ -34,6 +34,18 @@ from meet_cratin import meet_cratin_event
 from learn_cratin import learn_cratin_event
 
 
+import sys
+import os
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and PyInstaller """
+    try:
+        base_path = sys._MEIPASS  # PyInstaller temp folder
+    except AttributeError:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+
 game_state = GameState()
 
 event_manager = EventManager()
@@ -70,10 +82,10 @@ dt = 0
 #must be under pygame.init()
 #font:
 global title_font
-title_font = pygame.font.Font('font/DigitalDisco.ttf', 50)
+title_font = pygame.font.Font(resource_path('font/DigitalDisco.ttf'), 50)
 
 global text_font
-text_font = pygame.font.Font('font/DigitalDisco.ttf', 25)
+text_font = pygame.font.Font(resource_path('font/DigitalDisco.ttf'), 25)
 
 
 #intro:
