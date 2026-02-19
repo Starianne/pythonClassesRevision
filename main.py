@@ -1,4 +1,6 @@
 import pygame
+import asyncio
+
 from goobs import *
 from text_box import Textbox
 import os
@@ -381,43 +383,48 @@ start_buttons.append(Button(7*screen_width/18, screen_height/2-(screen_height/10
 game_buttons.append(Button(7*screen_width/18, screen_height/2+(screen_height/4), 400, 100, title_font, increment_day_func, 'Get through the day', screen)) #press this and current day goes up 
 
 #game loop -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+async def run():
+    global running, game_started, game_complete, game_active, current_day
+    while running:
+        #player inputs will be here
+        events = pygame.event.get()
+        for event in events:
+            if event.type == pygame.QUIT:
+                running = False
 
-while running:
-    #player inputs will be here
-    events = pygame.event.get()
-    for event in events:
-        if event.type == pygame.QUIT:
-            running = False
+        
+        screen.fill("#4595DF")
 
-    
-    screen.fill("#4595DF")
+        if game_started == False:
+            screen.blit(title_surface,title_rect)
+            for btn in start_buttons:
+                btn.process(events)
 
-    if game_started == False:
-        screen.blit(title_surface,title_rect)
-        for btn in start_buttons:
-            btn.process(events)
-
-    elif game_complete and not event_manager.is_active():
-        print("game complete")
-        running = False       
-     
-    elif event_manager.is_active():
-        event_manager.update(events, screen)
+        elif game_complete and not event_manager.is_active():
+            print("game complete")
+            running = False       
+        
+        elif event_manager.is_active():
+            event_manager.update(events, screen)
 
 
-    elif game_active:
-            goob.sprite.control_mode = "idle"
-            day_surface = title_font.render("GOOB - Day "+ str(current_day), False, "white").convert_alpha()
-            day_rect = day_surface.get_rect(center = (screen_width/2, screen_height/16))
-            screen.blit(day_surface,day_rect)
-            screen.blit(main_surface, main_rect)
-            make_terminal(screen, game_state, text_font, title_font, terminal_rect)
-            #Actual game goes in here
-            game_buttons[0].process(events) 
+        elif game_active:
+                goob.sprite.control_mode = "idle"
+                day_surface = title_font.render("GOOB - Day "+ str(current_day), False, "white").convert_alpha()
+                day_rect = day_surface.get_rect(center = (screen_width/2, screen_height/16))
+                screen.blit(day_surface,day_rect)
+                screen.blit(main_surface, main_rect)
+                make_terminal(screen, game_state, text_font, title_font, terminal_rect)
+                #Actual game goes in here
+                game_buttons[0].process(events) 
 
-            goob.draw(screen)
-            goob.update()   
+                goob.draw(screen)
+                goob.update()   
 
-    pygame.display.flip()
-    dt = clock.tick(60) / 1000
-pygame.quit()
+        pygame.display.flip()
+        await asyncio.sleep(0)
+        dt = clock.tick(60) / 1000
+    pygame.quit()
+
+if __name__ == "__main__":
+    asyncio.run(run())
